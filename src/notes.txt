@@ -1,0 +1,16 @@
+##################################################
+# WORLD
+##################################################
+
+The world is split up as follows:
+
+- Tiles, which are 16x16px sprites on the floor
+- Chunks, which are 5x5 sets of tiles (one block)
+- Regions, which are 3x3 sets of chunks (one screen)
+- World, which is made up from a number of regions
+
+R0,0 C0,0 T3,2
+RIGHT
+R0,0 C0,0 T4,2
+RIGHT
+R0,0 C1,0 T0,2

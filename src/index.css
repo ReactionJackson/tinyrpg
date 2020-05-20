@@ -1,0 +1,38 @@
+@font-face {
+    font-family: 'Press Start 2P';
+    src: url('assets/fonts/PressStart2P.eot');
+    src: url('assets/fonts/PressStart2P.eot?#iefix') format('embedded-opentype'),
+        url('assets/fonts/PressStart2P.woff2') format('woff2'),
+        url('assets/fonts/PressStart2P.woff') format('woff'),
+        url('assets/fonts/PressStart2P.svg#PressStart2P') format('svg');
+    font-weight: 500;
+    font-style: normal;
+}
+
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	user-select: none;
+	cursor: default;
+}
+
+body {
+	font-family: 'Press Start 2P';
+	font-size: 8px;
+	line-height: 14px;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-text-size-adjust: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+	color: #fff;
+	background-color: #111;
+}
