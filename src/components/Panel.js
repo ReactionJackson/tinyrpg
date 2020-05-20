@@ -3,8 +3,8 @@ import { blockSize } from '../constants/settings'
 
 export const Panel = styled.div`
   display: flex;
-  justify-content: centerd;
-  align-items: centerd;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   left: ${ ({ x }) => x * blockSize }px;
   top: ${ ({ y }) => y * blockSize }px;
@@ -13,7 +13,7 @@ export const Panel = styled.div`
   padding: ${ ({ border }) => border ? 12 : 0 }px;
   background-color: #000;
   overflow: hidden;
-  transform: scale(${ ({ visible }) => visible ? 0 : 1 });
+  transform: scale(${ ({ hidden }) => hidden ? 0 : 1 });
   transform-origin: center bottom;
   transition: transform steps(3, end) 150ms;
   &::after {
