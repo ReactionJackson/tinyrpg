@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { regionSize, blockSize } from '../constants/settings'
+import { SIZE_WORLD } from '../constants/sizes'
 
 const Overlay = () => {
 	
@@ -19,10 +19,11 @@ const Overlay = () => {
 	
 	return (
 		<div style={{
+			pointerEvents: 'none',
 			position: 'absolute',
 			right: 0,
-			width: regionSize * blockSize,
-			height: regionSize * blockSize,
+			width: SIZE_WORLD,
+			height: SIZE_WORLD,
 			overflow: 'hidden'
 		}}>
 			<OverlayTop cover={ isOpen } />

@@ -1,5 +1,5 @@
-import React from 'react'
-import { tileSize } from '../constants/settings'
+import React, { useEffect } from 'react'
+import { SIZE_TILE } from '../constants/sizes'
 
 const Character = ({ pos, flip = false }) => {
   // ...
@@ -7,13 +7,14 @@ const Character = ({ pos, flip = false }) => {
     <div style={{
       zIndex: 10,
       position: 'absolute',
-      left: pos.x * tileSize,
-      top: pos.y * tileSize,
-      width: tileSize,
-      height: tileSize,
+      left: pos.x * SIZE_TILE,
+      top: pos.y * SIZE_TILE,
+      width: SIZE_TILE,
+      height: SIZE_TILE,
       background: `url(${ require('../assets/sprites/guy-4.png') }) center no-repeat`,
       backgroundSize: 'cover',
-      transform: `rotateY(${ flip ? 180 : 0 }deg)`
+      transform: `rotateY(${ flip ? 180 : 0 }deg)`,
+      pointerEvents: 'none'
     }} />
   )
 }

@@ -1,5 +1,6 @@
 import React from 'react'
-import { Interface } from './components/Interface'
+import styled from 'styled-components'
+import { SIZE_INTERFACE } from './constants/sizes'
 import { Panel } from './components/Panel'
 import Exploration from './components/Exploration'
 import Party from './components/Party'
@@ -26,5 +27,12 @@ const Game = () => {
     </Interface>
   )
 }
+
+export const Interface = styled.main`
+  position: relative;
+  width: ${ SIZE_INTERFACE }px;
+  height: ${ SIZE_INTERFACE }px;
+  background-color: tomato;
+`
 
 export default Game

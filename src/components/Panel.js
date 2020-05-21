@@ -1,18 +1,17 @@
 import styled from 'styled-components'
-import { blockSize } from '../constants/settings'
+import { SIZE_BLOCK } from '../constants/sizes'
 
 export const Panel = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  left: ${ ({ x }) => x * blockSize }px;
-  top: ${ ({ y }) => y * blockSize }px;
-  width: ${ ({ width }) => width * blockSize }px;
-  height: ${ ({ height }) => height * blockSize }px;
+  left: ${ ({ x }) => x * SIZE_BLOCK }px;
+  top: ${ ({ y }) => y * SIZE_BLOCK }px;
+  width: ${ ({ width }) => width * SIZE_BLOCK }px;
+  height: ${ ({ height }) => height * SIZE_BLOCK }px;
   padding: ${ ({ border }) => border ? 12 : 0 }px;
   background-color: #000;
-  overflow: hidden;
   transform: scale(${ ({ hidden }) => hidden ? 0 : 1 });
   transform-origin: center bottom;
   transition: transform steps(3, end) 150ms;
