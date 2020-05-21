@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { SIZE_MAP, SIZE_TILE } from '../constants/sizes'
+import { replaceAt } from '../utils/replaceAt'
 import { useListener } from '../hooks/useListener'
 import PaintEditor from './PaintEditor'
 import { Sprite } from './Sprite'
@@ -11,6 +12,12 @@ const World = () => {
 	const [ paint, setPaint ] = useState('#fff')
 	const [ screen, setScreen ] = useState([])
 	const [ showGrid, setShowGrid ] = useState(true)
+	const [ textureData, setTextureData ] = useState('.................................................................................................................................................................................................................................')
+
+	useEffect(() => {
+		console.clear()
+		console.log('textureData', textureData)
+	}, [ textureData ])
 
 	useEffect(() => console.log('painting:', isPainting), [ isPainting ])
 	useEffect(() => console.log('paint:', paint), [ paint ])
@@ -20,6 +27,12 @@ const World = () => {
 			setShowGrid(!showGrid)
 		}
 	}, [])
+
+	const updateTextureData = (x, y, char) => {
+		let data = textureData
+		data = replaceAt(data, (y * SIZE_TILE) + x, char)
+		setTextureData(data)
+	}
 
 	return (
 		<div>
@@ -36,6 +49,7 @@ const World = () => {
     				paint={ paint }
     				isPainting={ isPainting }
     				showGrid={ showGrid }
+    				updateTextureData={ _ => updateTextureData(x, y, '!') }
     			/>
     		))
     	))}
@@ -44,14 +58,18 @@ const World = () => {
   )
 }
 
-const Tile = ({ isPainting, paint, showGrid }) => {
+const Tile = ({ isPainting, paint, showGrid, updateTextureData }) => {
 	const [ texture, setTexture ] = useState('#fff')
+	const handleSelection = () => {
+		setTexture(paint)
+		updateTextureData()
+	}
 	return (
     <Sprite
     	grid={ showGrid }
     	texture={ texture }
-    	onMouseDown={ _ => setTexture(paint) }
-    	onMouseOver={ _ => isPainting ? setTexture(paint) : null }
+    	onMouseDown={ _ => handleSelection() }
+    	onMouseOver={ _ => isPainting ? handleSelection() : null }
     />
   )
 }
