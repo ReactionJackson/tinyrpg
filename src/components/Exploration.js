@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { getChunks } from '../utils/getChunks'
+import { getRegion } from '../utils/getRegion'
 import { isDirectionalInput } from '../utils/isDirectionalInput'
 import { blockSize, chunkSize, regionSize, tileSize } from '../constants/settings'
 import { themes } from '../constants/themes'
@@ -20,14 +20,16 @@ const Exploration = () => {
 		tile: { x: 2, y: 2 }
 	})
 
+	const [ regionData, setRegionData ] = useState(getRegion(pos.region))
 	const [ flip, setFlip ] = useState(false)
 
-	const [ regionData, setRegionData ] = useState(getChunks(pos.region))
-
 	useEffect(() => {
-		if(regionData.world_position !== pos.region) {
-			setRegionData(getChunks(pos.region))
+
+		if(regionData.worldPosition !== pos.region.x
+		|| regionData.worldPosition.y !== pos.region.y) {
+			setRegionData(getRegion(pos.region))
 		}
+
 	}, [ pos ])
 
   useEffect(() => {
@@ -44,6 +46,7 @@ const Exploration = () => {
 				return false
 
 			let { region, chunk, tile } = pos
+			let showNewChunk = false
 
 			switch(code) {
 				case 'KeyW': // North
@@ -55,6 +58,7 @@ const Exploration = () => {
 						} else {
 							chunk.y--
 						}
+						showNewChunk = true
 					} else {
 						tile.y--
 					}
@@ -68,6 +72,7 @@ const Exploration = () => {
 						} else {
 							chunk.x++
 						}
+						showNewChunk = true
 					} else {
 						tile.x++
 					}
@@ -82,6 +87,7 @@ const Exploration = () => {
 						} else {
 							chunk.y++
 						}
+						showNewChunk = true
 					} else {
 						tile.y++
 					}
@@ -95,11 +101,23 @@ const Exploration = () => {
 						} else {
 							chunk.x--
 						}
+						showNewChunk = true
 					} else {
 						tile.x--
 					}
 					setFlip(true)
 					break
+			}
+
+			if(showNewChunk) {
+				const { chunks } = regionData
+				chunks.forEach(({ position }, i, a) => {
+					if(position.x === chunk.x
+					&& position.y === chunk.y) {
+						a[i].visible = 1
+					}
+				})
+				setRegionData({ ...regionData, chunks })
 			}
 
 			setPos({ region, chunk, tile })
@@ -116,9 +134,18 @@ const Exploration = () => {
 }
 
 const Region = ({ chunks }) => {
+	console.log('chunks', chunks)
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-    	{ chunks.map(({ theme, tiles }, i) => <Chunk key={ i } visible={ 1 } tiles={ tiles } />) }
+    	{
+    		chunks.map(({ theme, tiles, visible }, i) => (
+    			<Chunk
+    				key={ i }
+    				visible={ visible }
+    				tiles={ tiles }
+    			/>
+    		))
+    	}
     </div>
   )
 }
@@ -127,7 +154,15 @@ const Chunk = ({ visible = 1, tiles, theme }) => {
 	const { collision, sprites } = tiles
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', width: blockSize, height: blockSize, opacity: visible }}>
-      { sprites.map((sprite, i) => <Tile key={ i } sprite={ sprite } collision={ collision.indexOf(sprite) > -1 } />) }
+      {
+      	sprites.map((sprite, i) => (
+      		<Tile
+      			key={ i }
+      			sprite={ sprite }
+      			collision={ collision.indexOf(sprite) > -1 }
+      		/>
+      	))
+    	}
     </div>
   )
 }

@@ -2,11 +2,12 @@ import { VILLAGE_1 } from '../constants/themes'
 
 export const regions = [
 	{ // REGION 1
-		world_position: { x: 0, y: 0 },
+		worldPosition: { x: 0, y: 0 },
 		chunks: [
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 0, y: 0 },
+				visible: 1,
+				position: { x: 0, y: 0 },
 				tiles: {
 					sprites: [
 						1, 6, 6, 6, 1,
@@ -21,7 +22,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 1, y: 0 },
+				visible: 0,
+				position: { x: 1, y: 0 },
 				tiles: {
 					sprites: [
 						1, 1, 1, 1, 1,
@@ -36,7 +38,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 2, y: 0 },
+				visible: 0,
+				position: { x: 2, y: 0 },
 				tiles: {
 					sprites: [
 						1, 1, 1, 1, 1,
@@ -51,7 +54,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 0, y: 1 },
+				visible: 0,
+				position: { x: 0, y: 1 },
 				tiles: {
 					sprites: [
 						1, 1, 1, 1, 1,
@@ -66,7 +70,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 1, y: 1 },
+				visible: 0,
+				position: { x: 1, y: 1 },
 				tiles: {
 					sprites: [
 						1, 1, 0, 1, 1,
@@ -81,7 +86,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 2, y: 1 },
+				visible: 0,
+				position: { x: 2, y: 1 },
 				tiles: {
 					sprites: [
 						0, 0, 1, 1, 1,
@@ -96,7 +102,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 0, y: 2 },
+				visible: 0,
+				position: { x: 0, y: 2 },
 				tiles: {
 					sprites: [
 						1, 1, 1, 1, 1,
@@ -111,7 +118,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 1, y: 2 },
+				visible: 0,
+				position: { x: 1, y: 2 },
 				tiles: {
 					sprites: [
 						1, 1, 1, 1, 1,
@@ -126,7 +134,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 2, y: 2 },
+				visible: 0,
+				position: { x: 2, y: 2 },
 				tiles: {
 					sprites: [
 						1, 1, 1, 1, 1,
@@ -142,11 +151,12 @@ export const regions = [
 		]
 	},
 	{ // REGION 2
-		world_position: { x: 1, y: 0 },
+		worldPosition: { x: 1, y: 0 },
 		chunks: [
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 0, y: 0 },
+				visible: 0,
+				position: { x: 0, y: 0 },
 				tiles: {
 					sprites: [
 						1, 1, 1, 1, 1,
@@ -161,7 +171,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 1, y: 0 },
+				visible: 0,
+				position: { x: 1, y: 0 },
 				tiles: {
 					sprites: [
 						1, 6, 6, 6, 1,
@@ -176,7 +187,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 2, y: 0 },
+				visible: 0,
+				position: { x: 2, y: 0 },
 				tiles: {
 					sprites: [
 						1, 1, 1, 1, 1,
@@ -191,7 +203,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 0, y: 1 },
+				visible: 0,
+				position: { x: 0, y: 1 },
 				tiles: {
 					sprites: [
 						1, 1, 1, 1, 1,
@@ -206,7 +219,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 1, y: 1 },
+				visible: 0,
+				position: { x: 1, y: 1 },
 				tiles: {
 					sprites: [
 						1, 1, 1, 1, 1,
@@ -221,7 +235,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 2, y: 1 },
+				visible: 0,
+				position: { x: 2, y: 1 },
 				tiles: {
 					sprites: [
 						1, 1, 0, 1, 1,
@@ -236,7 +251,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 0, y: 2 },
+				visible: 0,
+				position: { x: 0, y: 2 },
 				tiles: {
 					sprites: [
 						1, 1, 1, 1, 1,
@@ -251,7 +267,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 1, y: 2 },
+				visible: 0,
+				position: { x: 1, y: 2 },
 				tiles: {
 					sprites: [
 						1, 1, 1, 1, 1,
@@ -266,7 +283,8 @@ export const regions = [
 			},
 			{
 				theme: VILLAGE_1,
-				chunk_position: { x: 2, y: 2 },
+				visible: 0,
+				position: { x: 2, y: 2 },
 				tiles: {
 					sprites: [
 						1, 1, 1, 1, 1,
