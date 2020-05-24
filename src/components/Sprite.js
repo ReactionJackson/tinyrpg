@@ -1,14 +1,27 @@
 import styled from 'styled-components'
-import { SIZE_TILE } from '../constants/sizes'
+import { SIZE_TILE } from '../constants'
 
 export const Sprite = styled.div`
 	position: relative;
 	width: ${ SIZE_TILE }px;
 	height: ${ SIZE_TILE }px;
-	line-height: ${ SIZE_TILE }px;
 	text-align: center;
-	background: ${ ({ texture }) => texture };
-	border: ${ ({ grid }) => grid ? '1px solid #000' : 'none' };
+	${ ({ x, y }) => x !== null && y !== null ? `
+		background-image: url(${ require('../assets/sprites/links_awakening.png') });
+		background-size: 688px auto;
+		background-position: left ${ x * -SIZE_TILE }px top ${ y * -SIZE_TILE }px;
+	` : `
+		background-color: #fff;
+	`}
+	${ ({ grid }) => grid ? `
+		outline: 1px solid #000;
+		font-size: 4px;
+		line-height: 5px;
+		text-shadow: 0 0 1px #000, 0 0 1px #000, 0 0 1px #000, 0 0 1px #000;
+	` : `
+		font-size: 0;
+		text-shadow: none;
+	`}
 	&::after {
 		display: none;
 		content: '';

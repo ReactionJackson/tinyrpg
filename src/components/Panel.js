@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { SIZE_BLOCK } from '../constants/sizes'
+import { SIZE_BLOCK } from '../constants'
 
 export const Panel = styled.div`
   display: flex;

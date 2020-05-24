@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { SIZE_INTERFACE } from './constants/sizes'
+import { SIZE_INTERFACE } from './constants'
 import { Panel } from './components/Panel'
 import Exploration from './components/Exploration'
 import Party from './components/Party'

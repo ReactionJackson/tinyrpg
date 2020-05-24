@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { SIZE_TILE } from '../constants/sizes'
+import { SIZE_TILE } from '../constants'
 
 const Character = ({ pos, flip = false }) => {
   // ...

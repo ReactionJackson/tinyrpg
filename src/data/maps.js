@@ -1,4 +1,4 @@
-import { THEMES, LAYERS } from '../constants/world'
+import { THEMES, LAYERS } from '../constants'
 
 export const overworldMaps = [
 	{

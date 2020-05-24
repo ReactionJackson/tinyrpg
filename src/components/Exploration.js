@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useListener } from '../hooks/useListener'
-import { SIZE_MAP } from '../constants/sizes'
+import { SIZE_MAP } from '../constants'
 import { overworldMaps } from '../data/maps'
 import { isDirectionalInput } from '../utils/isDirectionalInput'
 import { Panel } from './Panel'
