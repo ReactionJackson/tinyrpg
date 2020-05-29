@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { SIZE_MAP, SIZE_TILE } from '../constants'
+import { SIZE_MAP, SIZE_TILE, BLANK_MAP_STR } from '../constants'
 import { replaceAt } from '../utils/replaceAt'
 import { useListener } from '../hooks/useListener'
+import { useLog } from '../hooks/useLog'
 import { Panel } from './Panel'
 import { Sprite } from './Sprite'
 import Player from './Player'
@@ -11,29 +12,25 @@ import PaintEditor from './PaintEditor'
 const World = () => {
 	
 	const [ isPainting, setIsPainting ] = useState(false)
-	const [ sprite, setSprite ] = useState({ x: 0, y: 0, spriteKey: null })
+	const [ spriteSheet, setSpriteSheet ] = useState('01')
+	const [ sprite, setSprite ] = useState({ x: 0, y: 0 })
 	const [ screen, setScreen ] = useState({ x: 0, y: 0 })
-	const [ showGrid, setShowGrid ] = useState(true)
-	const [ textureData, setTextureData ] = useState('.................................................................................................................................................................................................................................')
+	const [ showGrid, setShowGrid ] = useState(false)
+	const [ tileData, setTileData ] = useState(BLANK_MAP_STR)
+	const [ objectData, setObjectData ] = useState(BLANK_MAP_STR)
 
-	useEffect(() => {
-		console.clear()
-		console.log('textureData', textureData)
-	}, [ textureData ])
-
-	useEffect(() => console.log('painting:', isPainting), [ isPainting ])
-	useEffect(() => console.log('sprite:', sprite), [ sprite ])
+	useLog('tileData', tileData)
+	useLog('isPainting', isPainting)
+	useLog('sprite', sprite)
 
 	useListener('keyup', ({ code }) => {
-		if(code === 'KeyG') {
-			setShowGrid(!showGrid)
-		}
+		if(code === 'KeyG') setShowGrid(!showGrid)
 	}, [])
 
 	const updateTextureData = (x, y, char) => {
-		let data = textureData
+		let data = tileData
 		data = replaceAt(data, (y * SIZE_TILE) + x, char)
-		setTextureData(data)
+		setTileData(data)
 	}
 
 	return (
@@ -51,7 +48,7 @@ const World = () => {
     				sprite={ sprite }
     				showGrid={ showGrid }
     				isPainting={ isPainting }
-    				updateTextureData={ _ => updateTextureData(x, y, sprite.spriteKey) }
+    				updateTextureData={ _ => updateTextureData(x, y) }
     			/>
     		))
     	))}
