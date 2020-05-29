@@ -3,14 +3,16 @@ import styled from 'styled-components'
 import { SIZE_MAP, SIZE_TILE } from '../constants'
 import { replaceAt } from '../utils/replaceAt'
 import { useListener } from '../hooks/useListener'
-import PaintEditor from './PaintEditor'
+import { Panel } from './Panel'
 import { Sprite } from './Sprite'
+import Player from './Player'
+import PaintEditor from './PaintEditor'
 
 const World = () => {
 	
 	const [ isPainting, setIsPainting ] = useState(false)
 	const [ sprite, setSprite ] = useState({ x: 0, y: 0, spriteKey: null })
-	const [ screen, setScreen ] = useState([])
+	const [ screen, setScreen ] = useState({ x: 0, y: 0 })
 	const [ showGrid, setShowGrid ] = useState(true)
 	const [ textureData, setTextureData ] = useState('.................................................................................................................................................................................................................................')
 
@@ -35,7 +37,7 @@ const World = () => {
 	}
 
 	return (
-		<div>
+		<Panel width={ 3 } height={ 3 } x={ 1 } y={ 0 }>
 			<PaintEditor selectSprite={ data => setSprite(data) } />
 	    <Grid
 	    	onMouseDown={ _ => setIsPainting(!isPainting) }
@@ -54,7 +56,8 @@ const World = () => {
     		))
     	))}
 	    </Grid>
-	  </div>
+	    <Player />
+	  </Panel>
   )
 }
 

@@ -14,7 +14,7 @@ export const Panel = styled.div`
   background-color: #000;
   transform: scale(${ ({ hidden }) => hidden ? 0 : 1 });
   transform-origin: center bottom;
-  transition: transform steps(3, end) 150ms;
+  transition: transform steps(4, end) 150ms;
   &::after {
     content: '';
     display: ${ ({ border }) => border ? 'block' : 'none' };

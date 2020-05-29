@@ -2,6 +2,26 @@ import React from 'react'
 import styled from 'styled-components'
 import { SIZE_TILE, SIZE_MAP, SPRITESHEET_KEY, SIZE_SPRITESHEET, THEMES, TILES } from '../constants'
 
+/*
+	probably refactor this so that it doesn't use characters as keys.
+	it would be better if the spritesheet was simply referenced as a 2 char xy pair,
+	which would also unlock spritesheets up to 3,844 tiles big! using 0-9 a-z A-Z (62x62).
+	it should probably also prefix this data string with 2 chars for a spritesheet id.
+	eg. 3x3 grid using "tileset_03.png" would be:
+	03
+	22 01 22
+	01 aF 01
+	22 01 22
+	concatenated would be 0322012201aF01220122
+	- use tileset_03.png (the "03")
+	- tile at x0y0 uses sprite from tileset_03 at position x2y2
+	- tile at x1y0 uses sprite from tileset_03 at position x0y1
+	- tile x2y0 use sprite x2y2
+	- tile x0y1 use sprite x0y1
+	- tile x1y1 use sprite x10y51 (when converting chars to ints)
+	etc.
+*/
+
 // <Tile sprite={ THEME_1[dataCharIndex(spriteId)] } { ...otherStuff } />
 
 const PaintEditor = ({ theme = THEMES.TOWN_1, selectSprite }) => (

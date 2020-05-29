@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { SIZE_INTERFACE } from './constants'
 import { Panel } from './components/Panel'
-import Exploration from './components/Exploration'
+import World from './components/World'
 import Party from './components/Party'
 import Actions from './components/Actions'
 import Dialog from './components/Dialog'
@@ -15,14 +15,11 @@ const Game = () => {
     <Interface>
       <Party />
       <Panel width={ 1 } height={ 1 } x={ 0 } y={ 3 } border>
-        &nbsp;Quest<br/>
-        >Items<br/>
-        &nbsp;Equip<br/>
-        &nbsp;Skill
+        &nbsp;Quest<br/>>Items<br/>&nbsp;Equip<br/>&nbsp;Skill
       </Panel>
       <Actions />
       <Dialog />
-      <Exploration />
+      <World />
       <Overlay />
     </Interface>
   )
