@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { SIZE_MAP, SIZE_TILE, BLANK_MAP_STR } from '../constants'
+import { SIZE_MAP, SIZE_TILE, SPRITESHEET_KEY, BLANK_MAP_STR } from '../constants'
 import { replaceAt } from '../utils/replaceAt'
 import { useListener } from '../hooks/useListener'
 import { useLog } from '../hooks/useLog'
@@ -13,29 +13,34 @@ const World = () => {
 	
 	const [ isPainting, setIsPainting ] = useState(false)
 	const [ spriteSheet, setSpriteSheet ] = useState('01')
-	const [ sprite, setSprite ] = useState({ x: 0, y: 0 })
-	const [ screen, setScreen ] = useState({ x: 0, y: 0 })
+	const [ spritePos, setSpritePos ] = useState({ x: 0, y: 0 })
+	const [ screenPos, setScreenPos ] = useState({ x: 0, y: 0 })
 	const [ showGrid, setShowGrid ] = useState(false)
 	const [ tileData, setTileData ] = useState(BLANK_MAP_STR)
 	const [ objectData, setObjectData ] = useState(BLANK_MAP_STR)
 
-	useLog('tileData', tileData)
-	useLog('isPainting', isPainting)
-	useLog('sprite', sprite)
+	useEffect(() => {
+		console.clear()
+		console.log('tileData', tileData, tileData.length)
+	}, [ tileData ])
+
+	// useLog('spritePos:', spritePos)
+	// useLog('isPainting:', isPainting)
 
 	useListener('keyup', ({ code }) => {
 		if(code === 'KeyG') setShowGrid(!showGrid)
 	}, [])
 
-	const updateTextureData = (x, y, char) => {
-		let data = tileData
-		data = replaceAt(data, (y * SIZE_TILE) + x, char)
+	const updateTileData = tilePos => {
+		const { x, y } = tilePos
+		const spriteStr = SPRITESHEET_KEY[spritePos.x] + SPRITESHEET_KEY[spritePos.y]
+		const data = replaceAt(tileData, ((x * 2) + ((SIZE_TILE * 2) * y)) - (y * 2), spriteStr)
 		setTileData(data)
 	}
 
 	return (
 		<Panel width={ 3 } height={ 3 } x={ 1 } y={ 0 }>
-			<PaintEditor selectSprite={ data => setSprite(data) } />
+			<PaintEditor selectSprite={ sprite => setSpritePos(sprite) } />
 	    <Grid
 	    	onMouseDown={ _ => setIsPainting(!isPainting) }
 	    	onMouseUp={ _ => setIsPainting(!isPainting) }
@@ -45,10 +50,10 @@ const World = () => {
     			<Tile
     				x={ x }
     				y={ y }
-    				sprite={ sprite }
+    				spritePos={ spritePos }
     				showGrid={ showGrid }
     				isPainting={ isPainting }
-    				updateTextureData={ _ => updateTextureData(x, y) }
+    				updateTileData={ _ => updateTileData({ x, y }) }
     			/>
     		))
     	))}
@@ -58,20 +63,20 @@ const World = () => {
   )
 }
 
-const Tile = ({ isPainting, sprite, showGrid, updateTextureData }) => {
-	const [ texture, setTexture ] = useState({ x: null, y: null })
+const Tile = ({ isPainting, spritePos, showGrid, updateTileData }) => {
+	const [ sprite, setSprite ] = useState({ x: 0, y: 0 })
 	const handleSelection = () => {
-		setTexture(sprite)
-		updateTextureData()
+		setSprite(spritePos)
+		updateTileData()
 	}
 	return (
     <Sprite
-    	x={ texture.x }
-    	y={ texture.y }
+    	x={ sprite.x }
+    	y={ sprite.y }
     	grid={ showGrid }
     	onMouseDown={ _ => handleSelection() }
     	onMouseOver={ _ => isPainting ? handleSelection() : null }
-    >x{ texture.x } y{ texture.y }</Sprite>
+    >x{ sprite.x } y{ sprite.y }</Sprite>
   )
 }
 

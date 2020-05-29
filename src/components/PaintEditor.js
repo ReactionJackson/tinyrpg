@@ -28,16 +28,12 @@ const PaintEditor = ({ theme = THEMES.TOWN_1, selectSprite }) => (
 	<SpriteSheet>
 	{
 		[...Array(SIZE_SPRITESHEET.y)].map((_, y) => (
-			[...Array(SIZE_SPRITESHEET.x)].map((_, x) => {
-				const spriteKey = SPRITESHEET_KEY[(y * SIZE_SPRITESHEET.x) + x]
-				return (
-					<Cell
-						key={ x + y }
-						spriteKey={ spriteKey }
-						onClick={ _ => selectSprite({ x, y }) }
-					/>
-				)
-			})
+			[...Array(SIZE_SPRITESHEET.x)].map((_, x) => (
+				<Cell
+					key={ x + y }
+					onClick={ _ => selectSprite({ x, y }) }
+				/>
+			))
 		))
 	}
 	</SpriteSheet>
