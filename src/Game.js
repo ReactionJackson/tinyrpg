@@ -14,9 +14,7 @@ const Game = () => {
   return (
     <Interface>
       <Party />
-      <Panel width={ 1 } height={ 1 } x={ 0 } y={ 3 } border>
-        &nbsp;Quest<br/>>Items<br/>&nbsp;Equip<br/>&nbsp;Skill
-      </Panel>
+      <Panel width={ 1 } height={ 1 } x={ 0 } y={ 3 } border />
       <Actions />
       <Dialog />
       <World />

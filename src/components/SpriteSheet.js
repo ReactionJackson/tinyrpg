@@ -39,6 +39,7 @@ const Sheet = styled.aside`
 `
 
 const Tile = styled.div`
+	cursor: pointer;
 	color: #fff;
 	font-size: 4px;
 	line-height: 8px;
