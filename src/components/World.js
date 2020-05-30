@@ -7,7 +7,9 @@ import { useLog } from '../hooks/useLog'
 import { Panel } from './Panel'
 import { Sprite } from './Sprite'
 import Player from './Player'
-import PaintEditor from './PaintEditor'
+import SpriteSheet from './SpriteSheet'
+
+const ADD_COLLISION = -1, REMOVE_COLLISION = -2
 
 const World = () => {
 	
@@ -18,14 +20,7 @@ const World = () => {
 	const [ showGrid, setShowGrid ] = useState(false)
 	const [ tileData, setTileData ] = useState(BLANK_MAP_STR)
 	const [ objectData, setObjectData ] = useState(BLANK_MAP_STR)
-
-	useEffect(() => {
-		console.clear()
-		console.log('tileData', tileData, tileData.length)
-	}, [ tileData ])
-
-	// useLog('spritePos:', spritePos)
-	// useLog('isPainting:', isPainting)
+	const [ collisionData, setCollisionData ] = useState([]) // an array of coords
 
 	useListener('keyup', ({ code }) => {
 		if(code === 'KeyG') setShowGrid(!showGrid)
@@ -38,9 +33,20 @@ const World = () => {
 		setTileData(data)
 	}
 
+	const updateCollisionData = (tilePos, collision) => {
+		if(collision === ADD_COLLISION
+		&& !collisionData.find(({ x, y }) => x === tilePos.x && y === tilePos.y)) {
+			setCollisionData([ ...collisionData, { ...tilePos } ])
+		} else if(collision === REMOVE_COLLISION) {
+			let data = [ ...collisionData ]
+			data = data.filter(({ x, y }) => (x !== tilePos.x || y !== tilePos.y))
+			setCollisionData(data)
+		}
+	}
+
 	return (
 		<Panel width={ 3 } height={ 3 } x={ 1 } y={ 0 }>
-			<PaintEditor selectSprite={ sprite => setSpritePos(sprite) } />
+			<SpriteSheet selectSprite={ sprite => setSpritePos(sprite) } />
 	    <Grid
 	    	onMouseDown={ _ => setIsPainting(!isPainting) }
 	    	onMouseUp={ _ => setIsPainting(!isPainting) }
@@ -54,21 +60,34 @@ const World = () => {
     				showGrid={ showGrid }
     				isPainting={ isPainting }
     				updateTileData={ _ => updateTileData({ x, y }) }
+    				updateCollisionData={ collision => updateCollisionData({ x, y }, collision) }
     			/>
     		))
     	))}
 	    </Grid>
-	    <Player />
+	    <Player collisionData={ collisionData } />
 	  </Panel>
   )
 }
 
-const Tile = ({ isPainting, spritePos, showGrid, updateTileData }) => {
+const Tile = ({ isPainting, spritePos, showGrid, updateTileData, updateCollisionData }) => {
+
 	const [ sprite, setSprite ] = useState({ x: 0, y: 0 })
-	const handleSelection = () => {
-		setSprite(spritePos)
-		updateTileData()
+	const [ collision, setCollision ] = useState(false)
+
+	const handleSelection = toggleCollision => {
+		if(spritePos === ADD_COLLISION) {
+			setCollision(true)
+			updateCollisionData(ADD_COLLISION)
+		} else if(spritePos === REMOVE_COLLISION) {
+			setCollision(false)
+			updateCollisionData(REMOVE_COLLISION)
+		} else {
+			setSprite(spritePos)
+			updateTileData()
+		}
 	}
+
 	return (
     <Sprite
     	x={ sprite.x }
@@ -76,9 +95,20 @@ const Tile = ({ isPainting, spritePos, showGrid, updateTileData }) => {
     	grid={ showGrid }
     	onMouseDown={ _ => handleSelection() }
     	onMouseOver={ _ => isPainting ? handleSelection() : null }
-    >x{ sprite.x } y{ sprite.y }</Sprite>
+    >
+    	x{ sprite.x } y{ sprite.y }
+    	{ collision ? <Collision /> : null }
+    </Sprite>
   )
 }
+
+const Collision = styled(Sprite)`
+	position: absolute;
+	left: 0;
+	top: 0;
+	opacity: 0.5;
+	background: red;
+`
 
 const Grid = styled.div`
 	display: flex;

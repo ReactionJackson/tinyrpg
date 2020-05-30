@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { SIZE_TILE, SIZE_MAP } from '../constants'
 import { useListener } from '../hooks/useListener'
+import { useLog } from '../hooks/useLog'
 
-const Player = () => {
+const isWalkable = (target, collisionData) => (
+  !collisionData.find(({ x, y }) => x === target.x && y === target.y)
+)
+
+const Player = ({ collisionData }) => {
 
   const [ pos, setPos ] = useState({ x: 0, y: 0 })
-  const [ flip, setFlip ] = useState(false) // this is bugged if moving from top right corner
+  const [ flip, setFlip ] = useState(false)
 
   useListener('keyup', ({ code }) => {
 
@@ -15,14 +20,14 @@ const Player = () => {
       case 'KeyW': // North
         if(newPos.y === 0) {
           newPos.y = SIZE_MAP - 1
-        } else {
+        } else if(isWalkable({ x: pos.x, y: pos.y - 1 }, collisionData)) {
           newPos.y--
         }
         break
       case 'KeyD': // East
         if(newPos.x === SIZE_MAP - 1) {
           newPos.x = 0
-        } else {
+        } else if(isWalkable({ x: pos.x + 1, y: pos.y }, collisionData)) {
           newPos.x++
         }
         setFlip(false)
@@ -30,14 +35,14 @@ const Player = () => {
       case 'KeyS': // South
         if(newPos.y === SIZE_MAP - 1) {
           newPos.y = 0
-        } else {
+        } else if(isWalkable({ x: pos.x, y: pos.y + 1 }, collisionData)) {
           newPos.y++
         }
         break
       case 'KeyA': // West
         if(newPos.x === 0) {
           newPos.x = SIZE_MAP - 1
-        } else {
+        } else if(isWalkable({ x: pos.x - 1, y: pos.y }, collisionData)) {
           newPos.x--
         }
         setFlip(true)
