@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { SIZE_INTERFACE } from './constants'
+import { useListener } from './hooks/useListener'
+import { getMapAtLocation } from './utils/getMapAtLocation'
 import { Panel } from './components/Panel'
 import World from './components/World'
 import Party from './components/Party'
@@ -17,7 +19,7 @@ const Game = () => {
       <Panel width={ 1 } height={ 1 } x={ 0 } y={ 3 } border>?</Panel>
       <Actions />
       <Dialog />
-      <World spawnPos={{ x: 0, y: 0 }} />
+      <World />
       <Overlay />
     </Interface>
   )

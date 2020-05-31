@@ -2,7 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 import { SIZE_INTERFACE, SIZE_TILE, SIZE_MAP, SPRITESHEET_KEY, SIZE_SPRITESHEET, THEMES } from '../constants'
 
-const SpriteSheets = ({ theme = THEMES.TOWN_1, selectSprite, saveMapData }) => (
+const SpriteSheets = ({
+	saveMapData,
+	selectTile,
+	selectEntity,
+	toggleErasing,
+	isErasing,
+	theme = THEMES.TOWN_1 // not used yet
+}) => (
 	<Sheets>
 		<Sheet type="tiles" id="01">
 		{
@@ -10,27 +17,27 @@ const SpriteSheets = ({ theme = THEMES.TOWN_1, selectSprite, saveMapData }) => (
 				[...Array(SIZE_SPRITESHEET)].map((_, x) => (
 					<Tile
 						key={ x + y }
-						onClick={ _ => selectSprite({ x, y }) }
+						onClick={ _ => selectTile({ x, y }) }
 					>{ SPRITESHEET_KEY[(y * SIZE_SPRITESHEET) + x] }</Tile>
 				))
 			))
 		}
 		</Sheet>
-		<Sheet type="objects" id="01">
+		<Sheet type="entities" id="01">
 		{
 			[...Array(SIZE_SPRITESHEET)].map((_, y) => (
 				[...Array(SIZE_SPRITESHEET)].map((_, x) => (
 					<Tile
 						key={ x + y }
-						onClick={ _ => selectSprite({ x, y }) }
+						onClick={ _ => selectEntity({ x, y }) }
 					/>
 				))
 			))
 		}
 		</Sheet>
 		<EditorButtons>
-			<CollisionButton onClick={ _ => selectSprite(-1) }></CollisionButton>
-			<CollisionButton onClick={ _ => selectSprite(-2) }>X</CollisionButton>
+			<DrawEraseButton onClick={ _ => toggleErasing() } isErasing={ isErasing } />
+			<CollisionButton onClick={ _ => selectTile(-1) } isErasing={ isErasing } />
 			<SaveButton onClick={ _ => saveMapData() }>S</SaveButton>
 		</EditorButtons>
 	</Sheets>
@@ -52,7 +59,7 @@ const Sheet = styled.div`
 	position: relative;
 	width: ${ SIZE_TILE * SIZE_SPRITESHEET }px;
 	height: ${ SIZE_TILE * SIZE_SPRITESHEET }px;
-	background: url(${ ({ type, id }) => require(`../assets/sprites/${ type }_${ id }.png`) }) no-repeat left top / ${ SIZE_TILE * SIZE_SPRITESHEET }px magenta;
+	background: url(${ ({ type, id }) => require(`../assets/sprites/${ type }_${ id }.png`) }) no-repeat left top / ${ SIZE_TILE * SIZE_SPRITESHEET }px tomato;
 `
 
 const Tile = styled.div`
@@ -80,15 +87,27 @@ const EditorButtons = styled.div`
 
 const EditorButton = styled(Tile)`
 	border-radius: 6px;
-	border-bottom: 2px solid #666;
-`
-
-const CollisionButton = styled(EditorButton)`
-	background-color: red;
+	border-bottom: 2px solid #888;
+	border-left: 1px solid #444;
+	border-right: 1px solid #444;
+	&:active {
+		height: 14px;
+		margin-top: 2px;
+		border-bottom: 0;
+		opacity: 0.8;
+	}
 `
 
 const SaveButton = styled(EditorButton)`
-	background-color: #bbb;
+	background-color: #ddd;
+`
+
+const DrawEraseButton = styled(EditorButton)`
+	${ ({ isErasing }) => `background: url(${ require('../assets/sprites/editor_icons.png') }) no-repeat left ${ !isErasing ? '0px' : '-14px' } top / auto 28px #fff;` }
+`
+
+const CollisionButton = styled(EditorButton)`
+	${ ({ isErasing }) => `background: url(${ require('../assets/sprites/editor_icons.png') }) no-repeat left ${ !isErasing ? '-28px' : '-42px' } top / auto 28px #fff;` }
 `
 
 export default SpriteSheets
