@@ -1,23 +1,29 @@
 import React, { useState, useEffect } from 'react'
 import { SIZE_TILE, SIZE_MAP } from '../constants'
 import { useListener } from '../hooks/useListener'
-import { useLog } from '../hooks/useLog'
+import { Sprite } from './Sprite'
+
+const SOUTH = 0, EAST = 1, WEST = 2, NORTH = 3 // based on character facing in spritesheet
 
 const isWalkable = (target, collisionData) => (
   !collisionData.find(({ x, y }) => x === target.x && y === target.y)
 )
 
+let walkTimeout = null
+
 const Player = ({ collisionData }) => {
 
-  const [ pos, setPos ] = useState({ x: 0, y: 0 })
-  const [ flip, setFlip ] = useState(false)
+  const [ pos, setPos ] = useState({ x: 0, y: 0, facing: SOUTH })
+  const [ isWalking, setIsWalking ] = useState(false)
+  const [ isAnimating, setIsAnimating ] = useState(false)
 
-  useListener('keyup', ({ code }) => {
+  const doWalk = code => {
 
     let newPos = pos
 
     switch(code) {
       case 'KeyW': // North
+        newPos.facing = NORTH
         if(newPos.y === 0) {
           newPos.y = SIZE_MAP - 1
         } else if(isWalkable({ x: pos.x, y: pos.y - 1 }, collisionData)) {
@@ -25,14 +31,15 @@ const Player = ({ collisionData }) => {
         }
         break
       case 'KeyD': // East
+        newPos.facing = EAST
         if(newPos.x === SIZE_MAP - 1) {
           newPos.x = 0
         } else if(isWalkable({ x: pos.x + 1, y: pos.y }, collisionData)) {
           newPos.x++
         }
-        setFlip(false)
         break
       case 'KeyS': // South
+        newPos.facing = SOUTH
         if(newPos.y === SIZE_MAP - 1) {
           newPos.y = 0
         } else if(isWalkable({ x: pos.x, y: pos.y + 1 }, collisionData)) {
@@ -40,34 +47,65 @@ const Player = ({ collisionData }) => {
         }
         break
       case 'KeyA': // West
+        newPos.facing = WEST
         if(newPos.x === 0) {
           newPos.x = SIZE_MAP - 1
         } else if(isWalkable({ x: pos.x - 1, y: pos.y }, collisionData)) {
           newPos.x--
         }
-        setFlip(true)
         break
     }
 
-    setPos({ ...newPos })
+    setTimeout(() => setIsAnimating(false), 300)
 
+    setPos({ ...newPos })
+  }
+
+  useListener('keydown', ({ repeat, code }) => {
+    if(repeat) return false
+    if(!isWalking && !isAnimating) {
+      setIsWalking(code)
+      setIsAnimating(true)
+    }
   }, [])
 
-  // useEffect(() => console.log(pos), [ pos ])
+  useListener('keyup', () => {
+    setIsWalking(false)
+  }, [])
+
+  useEffect(() => {
+    if(isWalking) {
+      doWalk(isWalking)
+      walkTimeout = setInterval(() => {
+        switch(pos.facing) {
+          case NORTH: return doWalk('KeyW')
+          case EAST: return doWalk('KeyD')
+          case SOUTH: return doWalk('KeyS')
+          case WEST: return doWalk('KeyA')
+        }
+      }, 300)
+    } else {
+      clearInterval(walkTimeout)
+    }
+  }, [ isWalking ])
 
   return (
-    <div style={{
-      zIndex: 10,
-      position: 'absolute',
-      left: pos.x * SIZE_TILE,
-      top: pos.y * SIZE_TILE,
-      width: SIZE_TILE,
-      height: SIZE_TILE,
-      background: `url(${ require('../assets/sprites/guy-4.png') }) center no-repeat`,
-      backgroundSize: 'cover',
-      transform: `rotateY(${ flip ? 180 : 0 }deg)`,
-      pointerEvents: 'none'
-    }} />
+    <Sprite
+      id="00"
+      type="character"
+      x={ 0 }
+      y={ pos.facing } // facing based on spritesheet rows
+      size={ 256 }
+      style={{
+        zIndex: 10,
+        position: 'absolute',
+        left: pos.x * SIZE_TILE,
+        top: pos.y * SIZE_TILE,
+        pointerEvents: 'none',
+        backgroundColor: 'rgba(255, 0, 255, 0.4)',
+        outline: 'none'
+      }}
+    />
   )
 }
 

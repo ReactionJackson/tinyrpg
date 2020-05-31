@@ -3,11 +3,10 @@ import styled from 'styled-components'
 import { SIZE_MAP, SIZE_TILE, SPRITESHEET_KEY, BLANK_MAP_STR } from '../constants'
 import { replaceAt } from '../utils/replaceAt'
 import { useListener } from '../hooks/useListener'
-import { useLog } from '../hooks/useLog'
 import { Panel } from './Panel'
 import { Sprite } from './Sprite'
 import Player from './Player'
-import SpriteSheet from './SpriteSheet'
+import SpriteSheets from './SpriteSheets'
 
 const ADD_COLLISION = -1, REMOVE_COLLISION = -2
 
@@ -15,18 +14,20 @@ const World = () => {
 	
 	const [ tileData, setTileData ] = useState(BLANK_MAP_STR)
 	const [ objectData, setObjectData ] = useState(BLANK_MAP_STR)
-	const [ collisionData, setCollisionData ] = useState([{ x: 2, y: 2 }]) // an array of coords
-	const [ triggerData, setTriggerData ] = useState([{ x: 4, y: 2 }, { x: 4, y: 3 } ]) // a 2d array of groups of coords
+	const [ collisionData, setCollisionData ] = useState([]) // an array of coords
+	const [ triggerData, setTriggerData ] = useState([]) // a 2d array of groups of coords?
 
 	const [ isPainting, setIsPainting ] = useState(false)
+	const [ entitySheet, setEntitySheet ] = useState('01')
 	const [ spriteSheet, setSpriteSheet ] = useState('01')
 	const [ spritePos, setSpritePos ] = useState({ x: 0, y: 0 })
 	const [ screenPos, setScreenPos ] = useState({ x: 0, y: 0 })
-	const [ showGrid, setShowGrid ] = useState(false)
 
-	useListener('keyup', ({ code }) => {
-		if(code === 'KeyG') setShowGrid(!showGrid)
-	}, [])
+	// useListener('keyup', ({ code }) => {
+	// 	if(code === 'KeyG') setShowGrid(!showGrid)
+	// }, [])
+
+	useEffect(() => setTimeout(() => console.clear(), 100), [])
 
 	const updateTileData = tilePos => {
 		const { x, y } = tilePos
@@ -52,7 +53,7 @@ const World = () => {
 
 	return (
 		<Panel width={ 3 } height={ 3 } x={ 1 } y={ 0 }>
-			<SpriteSheet selectSprite={ sprite => setSpritePos(sprite) } />
+			<SpriteSheets selectSprite={ sprite => setSpritePos(sprite) } />
 	    <Grid
 	    	onMouseDown={ _ => setIsPainting(!isPainting) }
 	    	onMouseUp={ _ => setIsPainting(!isPainting) }
@@ -60,11 +61,12 @@ const World = () => {
 	    {[...Array(SIZE_MAP)].map((_, y) => (
     		[...Array(SIZE_MAP)].map((_, x) => (
     			<Tile
+    				spriteSheet={ spriteSheet }
+    				entitySheet={ entitySheet }
     				hasCollision={ hasCoordsInList({ x, y }, collisionData) }
     				hasTrigger={ hasCoordsInList({ x, y }, triggerData) }
     				hasEntity={ x === 2 && y === 5 } // testing
     				spritePos={ spritePos }
-    				showGrid={ showGrid }
     				isPainting={ isPainting }
     				updateTileData={ _ => updateTileData({ x, y }) }
     				updateCollisionData={ collision => updateCollisionData({ x, y }, collision) }
@@ -78,6 +80,8 @@ const World = () => {
 }
 
 const Tile = ({
+	spriteSheet,
+	entitySheet,
 	isPainting,
 	spritePos,
 	hasCollision,
@@ -105,11 +109,10 @@ const Tile = ({
     <Sprite
     	x={ sprite.x }
     	y={ sprite.y }
-    	grid={ showGrid }
+    	id={ spriteSheet }
     	onMouseDown={ _ => handleSelection() }
     	onMouseOver={ _ => isPainting ? handleSelection() : null }
     >
-    	x{ sprite.x } y{ sprite.y }
     	{ hasCollision ? <Collision /> : null }
     	{ hasTrigger ? <Trigger /> : null }
     	{ hasEntity ? <Entity x={ 0 } y={ 0 } /> : null }
@@ -117,21 +120,17 @@ const Tile = ({
   )
 }
 
-const Collision = styled(Sprite)`
+const Marker = styled.div`
 	position: absolute;
 	left: 0;
 	top: 0;
+	width: 100%;
+	height: 100%;
 	opacity: 0.5;
-	background: red;
 `
 
-const Trigger = styled(Sprite)`
-	position: absolute;
-	left: 0;
-	top: 0;
-	opacity: 0.5;
-	background: magenta;
-`
+const Collision = styled(Marker)`background-color: red;`
+const Trigger = styled(Marker)`background-color: magenta;`
 
 const Entity = styled.div`
 	width: 50%;
