@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { SIZE_TILE, SIZE_MAP } from '../constants'
+import { SIZE_TILE, SIZE_MAP, NORTH, EAST, SOUTH, WEST, PLAYER_SPEED } from '../constants'
 import { useListener } from '../hooks/useListener'
 import { Sprite } from './Sprite'
 
@@ -9,19 +9,17 @@ import { Sprite } from './Sprite'
   specific way
 */
 
-const SOUTH = 0, EAST = 1, WEST = 2, NORTH = 3 // based on character facing in spritesheet
-
-const isWalkable = (target, collisionData) => (
-  !collisionData.find(({ x, y }) => x === target.x && y === target.y)
-)
-
 let walkTimeout = null
 
-const Player = ({ collisionData }) => {
+const Player = ({ doScreenTransition, collisionData }) => {
 
   const [ pos, setPos ] = useState({ x: 0, y: 0, facing: SOUTH })
   const [ isWalking, setIsWalking ] = useState(false)
   const [ isAnimating, setIsAnimating ] = useState(false)
+
+  const isWalkable = target => (
+    !collisionData.find(({ x, y }) => x === target.x && y === target.y)
+  )
 
   const doWalk = code => {
 
@@ -32,7 +30,8 @@ const Player = ({ collisionData }) => {
         newPos.facing = NORTH
         if(newPos.y === 0) {
           newPos.y = SIZE_MAP - 1
-        } else if(isWalkable({ x: pos.x, y: pos.y - 1 }, collisionData)) {
+          doScreenTransition(NORTH)
+        } else if(isWalkable({ x: pos.x, y: pos.y - 1 })) {
           newPos.y--
         }
         break
@@ -40,7 +39,8 @@ const Player = ({ collisionData }) => {
         newPos.facing = EAST
         if(newPos.x === SIZE_MAP - 1) {
           newPos.x = 0
-        } else if(isWalkable({ x: pos.x + 1, y: pos.y }, collisionData)) {
+          doScreenTransition(EAST)
+        } else if(isWalkable({ x: pos.x + 1, y: pos.y })) {
           newPos.x++
         }
         break
@@ -48,7 +48,8 @@ const Player = ({ collisionData }) => {
         newPos.facing = SOUTH
         if(newPos.y === SIZE_MAP - 1) {
           newPos.y = 0
-        } else if(isWalkable({ x: pos.x, y: pos.y + 1 }, collisionData)) {
+          doScreenTransition(SOUTH)
+        } else if(isWalkable({ x: pos.x, y: pos.y + 1 })) {
           newPos.y++
         }
         break
@@ -56,13 +57,14 @@ const Player = ({ collisionData }) => {
         newPos.facing = WEST
         if(newPos.x === 0) {
           newPos.x = SIZE_MAP - 1
-        } else if(isWalkable({ x: pos.x - 1, y: pos.y }, collisionData)) {
+          doScreenTransition(WEST)
+        } else if(isWalkable({ x: pos.x - 1, y: pos.y })) {
           newPos.x--
         }
         break
     }
 
-    setTimeout(() => setIsAnimating(false), 300)
+    setTimeout(() => setIsAnimating(false), PLAYER_SPEED)
 
     setPos({ ...newPos })
   }
@@ -89,7 +91,7 @@ const Player = ({ collisionData }) => {
           case SOUTH: return doWalk('KeyS')
           case WEST: return doWalk('KeyA')
         }
-      }, 300)
+      }, PLAYER_SPEED)
     } else {
       clearInterval(walkTimeout)
     }

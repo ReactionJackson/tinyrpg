@@ -5,6 +5,13 @@ export const SIZE_MAP = 15 // 15x15 tiles
 export const SIZE_TILE = SIZE_WORLD / SIZE_MAP // px
 export const SIZE_SPRITESHEET = 9
 
+export const PLAYER_SPEED = 300 // ms
+
+export const SOUTH = 0 // based on character facing in spritesheet
+export const EAST = 1
+export const WEST = 2
+export const NORTH = 3
+
 export const SPRITESHEET_KEY = '0123456789abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!?@£$€%^&*#[]{}()<>'
 export const BLANK_TILE_STR = '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
 export const BLANK_ENTITY_STR = '.................................................................................................................................................................................................................................'

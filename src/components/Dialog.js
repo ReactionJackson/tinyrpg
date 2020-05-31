@@ -18,8 +18,8 @@ const Dialog = () => {
 
 	return (
     <Panel width={ 3 } height={ 1 } x={ 1 } y={ 3 } hidden={ hidden } border>
-      * Lil Business Plan<br />
-      ‘Fast and furious tokyo arrow’
+      * Quills<br />
+      ‘We must finish the map editor so we can get onto the cool stuff!’
     </Panel>
 	)
 }

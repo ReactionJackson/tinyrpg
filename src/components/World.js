@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { SIZE_MAP, SIZE_TILE, SIZE_SPRITESHEET, SPRITESHEET_KEY, MAP_TYPES } from '../constants'
+import {
+	SIZE_MAP,
+	SIZE_TILE,
+	SIZE_SPRITESHEET,
+	SPRITESHEET_KEY,
+	MAP_TYPES,
+	NORTH,
+	EAST,
+	SOUTH,
+	WEST
+} from '../constants'
 import { replaceAt } from '../utils/replaceAt'
 import { getGridIndex } from '../utils/getGridIndex'
 import { convertCharToCoords } from '../utils/convertCharToCoords'
@@ -19,19 +29,19 @@ const TYPE_TILE = 0, TYPE_ENTITY = 1
 
 const World = () => {
 
-	const [ mapData, setMapData ] = useState(getMapAtLocation({ x: 0, y: 0 }, MAP_TYPES.OVERWORLD))
+	const [ screenPos, setScreenPos ] = useState({ x: 0, y: 0 })
+	const [ mapData, setMapData ] = useState(getMapAtLocation(screenPos, MAP_TYPES.OVERWORLD))
 	const [ tileData, setTileData ] = useState(mapData.tiles)
 	const [ entityData, setEntityData ] = useState(mapData.entities)
 	const [ collisionData, setCollisionData ] = useState(mapData.collision)
 	const [ triggerData, setTriggerData ] = useState([]) // a 2d array of groups of coords?
 
-	const [ screenPos, setScreenPos ] = useState({ x: 0, y: 0 })
+	const [ tileSheet, setTileSheet ] = useState('01')
+	const [ entitySheet, setEntitySheet ] = useState('01')
+
 	const [ tilePos, setTilePos ] = useState({ x: 0, y: 0 })
 	const [ entityPos, setEntityPos ] = useState({ x: 0, y: 0 })
 
-	const [ tileSheet, setTileSheet ] = useState('01')
-	const [ entitySheet, setEntitySheet ] = useState('01')
-	
 	const [ paintType, setPaintType ] = useState(TYPE_ENTITY)
 	const [ isPainting, setIsPainting ] = useState(false)
 	const [ isErasing, setIsErasing ] = useState(false)
@@ -39,6 +49,33 @@ const World = () => {
 	useEffect(() => setTimeout(() => {
 		console.clear()
 	}, 300), [])
+
+	// World Traversal Stuff:
+
+	const doScreenTransition = direction => {
+		console.clear()
+		console.log(`doScreenTransition(${ direction })`)
+		let { x, y } = screenPos
+		switch(direction) {
+			case NORTH: y--; break
+			case EAST: x++; break
+			case SOUTH: y++; break
+			case WEST: x--; break
+		}
+		setScreenPos({ x, y })
+	}
+
+	useEffect(() => {
+		setMapData(getMapAtLocation(screenPos, MAP_TYPES.OVERWORLD))
+	}, [ screenPos ])
+
+	useEffect(() => {
+		setTileData(mapData.tiles)
+		setEntityData(mapData.entities)
+		setCollisionData(mapData.collision)
+	}, [ mapData ])
+
+	// Level Editor Stuff:
 
 	const saveMapData = () => {
 		let data = ''
@@ -119,7 +156,11 @@ const World = () => {
     		))
     	))}
 	    </Grid>
-	    <Player collisionData={ collisionData } />
+	    
+	    <Player
+	    	doScreenTransition={ direction => doScreenTransition(direction) }
+	    	collisionData={ collisionData }
+	    />
 	  </Panel>
   )
 }
@@ -142,9 +183,8 @@ const Tile = ({
 	const [ tile, setTile ] = useState(initialTile)
 	const [ entity, setEntity ] = useState(initialEntity)
 
-	useEffect(() => {
-		setEntity(initialEntity)
-	}, [ initialEntity ])
+	useEffect(() => setTile(initialTile), [ initialTile ])	
+	useEffect(() => setEntity(initialEntity), [ initialEntity ])
 
 	const handleSelection = () => {
 		if(paintType === TYPE_TILE) {
