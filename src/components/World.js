@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { SIZE_MAP, SIZE_TILE, SPRITESHEET_KEY, BLANK_MAP_STR } from '../constants'
+import { SIZE_MAP, SIZE_TILE, SIZE_SPRITESHEET, SPRITESHEET_KEY, BLANK_MAP_STR } from '../constants'
 import { replaceAt } from '../utils/replaceAt'
+import { getGridIndex } from '../utils/getGridIndex'
+import { convertCharToCoords } from '../utils/convertCharToCoords'
+import { hasCoordsInList } from '../utils/hasCoordsInList'
+import { copyToClipboard } from '../utils/copyToClipboard'
 import { useListener } from '../hooks/useListener'
+import { overworldMaps } from '../data/maps'
 import { Panel } from './Panel'
 import { Sprite } from './Sprite'
 import Player from './Player'
@@ -10,11 +15,11 @@ import SpriteSheets from './SpriteSheets'
 
 const ADD_COLLISION = -1, REMOVE_COLLISION = -2
 
-const World = () => {
+const World = ({ spawnPos }) => {
 	
-	const [ tileData, setTileData ] = useState(BLANK_MAP_STR)
+	const [ tileData, setTileData ] = useState(overworldMaps[0].tiles)
 	const [ objectData, setObjectData ] = useState(BLANK_MAP_STR)
-	const [ collisionData, setCollisionData ] = useState([]) // an array of coords
+	const [ collisionData, setCollisionData ] = useState(overworldMaps[0].collision)
 	const [ triggerData, setTriggerData ] = useState([]) // a 2d array of groups of coords?
 
 	const [ isPainting, setIsPainting ] = useState(false)
@@ -22,17 +27,30 @@ const World = () => {
 	const [ spriteSheet, setSpriteSheet ] = useState('01')
 	const [ spritePos, setSpritePos ] = useState({ x: 0, y: 0 })
 	const [ screenPos, setScreenPos ] = useState({ x: 0, y: 0 })
+	
+	useEffect(() => setTimeout(() => {
+		console.clear()
+		console.log(tileData)
+	}, 100), [])
 
-	// useListener('keyup', ({ code }) => {
-	// 	if(code === 'KeyG') setShowGrid(!showGrid)
-	// }, [])
+	useListener('click', _ => convertCharToCoords('l'), [])
 
-	useEffect(() => setTimeout(() => console.clear(), 100), [])
+	useEffect(() => console.log('collisionData', collisionData), [ collisionData ])
+
+	const saveMapData = () => {
+		let data = ''
+		data += `\t\tcollision: ${ JSON.stringify(collisionData) },`
+		data += `\n\t\ttiles: ${ JSON.stringify(tileData) },`
+		copyToClipboard(data)
+		console.log('copied!')
+	}
 
 	const updateTileData = tilePos => {
-		const { x, y } = tilePos
-		const spriteStr = SPRITESHEET_KEY[spritePos.x] + SPRITESHEET_KEY[spritePos.y]
-		const data = replaceAt(tileData, ((x * 2) + ((SIZE_TILE * 2) * y)) - (y * 2), spriteStr)
+		const spriteIndex = getGridIndex(spritePos, SIZE_SPRITESHEET)
+		const tileIndex = getGridIndex(tilePos, SIZE_MAP)
+		const spriteKey = SPRITESHEET_KEY[spriteIndex]
+		const data = replaceAt(tileData, tileIndex, spriteKey)
+		// console.log(spriteIndex, tileIndex, spriteKey)
 		setTileData(data)
 	}
 
@@ -47,13 +65,12 @@ const World = () => {
 		}
 	}
 
-	const hasCoordsInList = ({ x, y }, list) => (
-		list.find(item => item.x === x && item.y === y)
-	)
-
 	return (
 		<Panel width={ 3 } height={ 3 } x={ 1 } y={ 0 }>
-			<SpriteSheets selectSprite={ sprite => setSpritePos(sprite) } />
+			<SpriteSheets
+				saveMapData={ _ => saveMapData() }
+				selectSprite={ sprite => setSpritePos(sprite) }
+			/>
 	    <Grid
 	    	onMouseDown={ _ => setIsPainting(!isPainting) }
 	    	onMouseUp={ _ => setIsPainting(!isPainting) }
@@ -61,6 +78,7 @@ const World = () => {
 	    {[...Array(SIZE_MAP)].map((_, y) => (
     		[...Array(SIZE_MAP)].map((_, x) => (
     			<Tile
+    				initialSprite={ convertCharToCoords(tileData[(y * SIZE_MAP) + x]) }
     				spriteSheet={ spriteSheet }
     				entitySheet={ entitySheet }
     				hasCollision={ hasCoordsInList({ x, y }, collisionData) }
@@ -80,6 +98,7 @@ const World = () => {
 }
 
 const Tile = ({
+	initialSprite = { x: 0, y: 0 },
 	spriteSheet,
 	entitySheet,
 	isPainting,
@@ -92,7 +111,7 @@ const Tile = ({
 	updateCollisionData
 }) => {
 
-	const [ sprite, setSprite ] = useState({ x: 0, y: 0 })
+	const [ sprite, setSprite ] = useState(initialSprite)
 
 	const handleSelection = toggleCollision => {
 		if(spritePos === ADD_COLLISION) {

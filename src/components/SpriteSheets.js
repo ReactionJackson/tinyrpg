@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { SIZE_INTERFACE, SIZE_TILE, SIZE_MAP, SPRITESHEET_KEY, SIZE_SPRITESHEET, THEMES } from '../constants'
 
-const SpriteSheets = ({ theme = THEMES.TOWN_1, selectSprite }) => (
+const SpriteSheets = ({ theme = THEMES.TOWN_1, selectSprite, saveMapData }) => (
 	<Sheets>
 		<Sheet type="tiles" id="01">
 		{
@@ -11,20 +11,10 @@ const SpriteSheets = ({ theme = THEMES.TOWN_1, selectSprite }) => (
 					<Tile
 						key={ x + y }
 						onClick={ _ => selectSprite({ x, y }) }
-					/>
+					>{ SPRITESHEET_KEY[(y * SIZE_SPRITESHEET) + x] }</Tile>
 				))
 			))
 		}
-		<Tile
-			key="collision"
-			onClick={ _ => selectSprite(-1) }
-			style={{ position: 'absolute', bottom: SIZE_TILE, left: -SIZE_TILE, background: 'red' }}
-		/>
-		<Tile
-			key="remove-collision"
-			onClick={ _ => selectSprite(-2) }
-			style={{ position: 'absolute', bottom: 0, left: -SIZE_TILE, background: 'red' }}
-		>X</Tile>
 		</Sheet>
 		<Sheet type="objects" id="01">
 		{
@@ -38,6 +28,11 @@ const SpriteSheets = ({ theme = THEMES.TOWN_1, selectSprite }) => (
 			))
 		}
 		</Sheet>
+		<EditorButtons>
+			<CollisionButton onClick={ _ => selectSprite(-1) }></CollisionButton>
+			<CollisionButton onClick={ _ => selectSprite(-2) }>X</CollisionButton>
+			<SaveButton onClick={ _ => saveMapData() }>S</SaveButton>
+		</EditorButtons>
 	</Sheets>
 )
 
@@ -63,7 +58,7 @@ const Sheet = styled.div`
 const Tile = styled.div`
 	cursor: pointer;
 	color: #fff;
-	font-size: 4px;
+	font-size: 6px;
 	line-height: 8px;
 	display: flex;
 	justify-content: center;
@@ -73,7 +68,27 @@ const Tile = styled.div`
 	height: ${ SIZE_TILE }px;
 	border-top: 1px solid #000;
 	border-left: 1px solid #000;
-	text-shadow: 0 0 1px #000, 0 0 1px #000, 0 0 1px #000, 0 0 1px #000;
+	text-shadow: 0 0 1px #000, 0 0 1px #000, 0 0 1px #000, 0 0 1px #000, 0 0 1px #000, 0 0 1px #000, 0 0 1px #000, 0 0 1px #000;
+`
+
+const EditorButtons = styled.div`
+	position: absolute;
+	right: ${ SIZE_TILE * SIZE_SPRITESHEET }px;
+	width: ${ SIZE_TILE }px;
+	height: 100%;
+`
+
+const EditorButton = styled(Tile)`
+	border-radius: 6px;
+	border-bottom: 2px solid #666;
+`
+
+const CollisionButton = styled(EditorButton)`
+	background-color: red;
+`
+
+const SaveButton = styled(EditorButton)`
+	background-color: #bbb;
 `
 
 export default SpriteSheets

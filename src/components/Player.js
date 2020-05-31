@@ -3,6 +3,12 @@ import { SIZE_TILE, SIZE_MAP } from '../constants'
 import { useListener } from '../hooks/useListener'
 import { Sprite } from './Sprite'
 
+/*
+  Need to see if I can improve the walking so you can't
+  shift directions and such when pressing keys in a
+  specific way
+*/
+
 const SOUTH = 0, EAST = 1, WEST = 2, NORTH = 3 // based on character facing in spritesheet
 
 const isWalkable = (target, collisionData) => (

@@ -14,10 +14,10 @@ const Game = () => {
   return (
     <Interface>
       <Party />
-      <Panel width={ 1 } height={ 1 } x={ 0 } y={ 3 } border />
+      <Panel width={ 1 } height={ 1 } x={ 0 } y={ 3 } border>?</Panel>
       <Actions />
       <Dialog />
-      <World />
+      <World spawnPos={{ x: 0, y: 0 }} />
       <Overlay />
     </Interface>
   )

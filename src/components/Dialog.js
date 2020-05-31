@@ -18,8 +18,8 @@ const Dialog = () => {
 
 	return (
     <Panel width={ 3 } height={ 1 } x={ 1 } y={ 3 } hidden={ hidden } border>
-      * De Battié<br />
-      ‘Do you copy, commander!? We have the enemy's airship in our sights, over!’
+      * Lil Business Plan<br />
+      ‘Fast and furious tokyo arrow’
     </Panel>
 	)
 }
