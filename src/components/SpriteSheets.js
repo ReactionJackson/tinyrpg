@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { SIZE_INTERFACE, SIZE_TILE, SIZE_MAP, SPRITESHEET_KEY, SIZE_SPRITESHEET, THEMES } from '../constants'
+import { SIZES, THEMES, SPRITESHEET_KEY } from '../constants'
 
 const SpriteSheets = ({
 	saveMapData,
@@ -13,20 +13,20 @@ const SpriteSheets = ({
 	<Sheets>
 		<Sheet type="tiles" id="01">
 		{
-			[...Array(SIZE_SPRITESHEET)].map((_, y) => (
-				[...Array(SIZE_SPRITESHEET)].map((_, x) => (
+			[...Array(SIZES.SPRITESHEET)].map((_, y) => (
+				[...Array(SIZES.SPRITESHEET)].map((_, x) => (
 					<Tile
 						key={ x + y }
 						onClick={ _ => selectTile({ x, y }) }
-					>{ SPRITESHEET_KEY[(y * SIZE_SPRITESHEET) + x] }</Tile>
+					>{ SPRITESHEET_KEY[(y * SIZES.SPRITESHEET) + x] }</Tile>
 				))
 			))
 		}
 		</Sheet>
 		<Sheet type="entities" id="01">
 		{
-			[...Array(SIZE_SPRITESHEET)].map((_, y) => (
-				[...Array(SIZE_SPRITESHEET)].map((_, x) => (
+			[...Array(SIZES.SPRITESHEET)].map((_, y) => (
+				[...Array(SIZES.SPRITESHEET)].map((_, x) => (
 					<Tile
 						key={ x + y }
 						onClick={ _ => selectEntity({ x, y }) }
@@ -49,17 +49,17 @@ const Sheets = styled.aside`
 	justify-content: space-between;
 	position: absolute;
 	right: 0;
-	bottom: calc(100% + ${ SIZE_TILE }px);
-	width: ${ SIZE_INTERFACE }px;
+	bottom: calc(100% + ${ SIZES.TILE }px);
+	width: ${ SIZES.INTERFACE }px;
 `
 
 const Sheet = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	position: relative;
-	width: ${ SIZE_TILE * SIZE_SPRITESHEET }px;
-	height: ${ SIZE_TILE * SIZE_SPRITESHEET }px;
-	background: url(${ ({ type, id }) => require(`../assets/sprites/${ type }_${ id }.png`) }) no-repeat left top / ${ SIZE_TILE * SIZE_SPRITESHEET }px tomato;
+	width: ${ SIZES.TILE * SIZES.SPRITESHEET }px;
+	height: ${ SIZES.TILE * SIZES.SPRITESHEET }px;
+	background: url(${ ({ type, id }) => require(`../assets/sprites/${ type }_${ id }.png`) }) no-repeat left top / ${ SIZES.TILE * SIZES.SPRITESHEET }px tomato;
 `
 
 const Tile = styled.div`
@@ -71,8 +71,8 @@ const Tile = styled.div`
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	width: ${ SIZE_TILE }px;
-	height: ${ SIZE_TILE }px;
+	width: ${ SIZES.TILE }px;
+	height: ${ SIZES.TILE }px;
 	border-top: 1px solid #000;
 	border-left: 1px solid #000;
 	text-shadow: 0 0 1px #000, 0 0 1px #000, 0 0 1px #000, 0 0 1px #000, 0 0 1px #000, 0 0 1px #000, 0 0 1px #000, 0 0 1px #000;
@@ -80,8 +80,8 @@ const Tile = styled.div`
 
 const EditorButtons = styled.div`
 	position: absolute;
-	right: ${ SIZE_TILE * SIZE_SPRITESHEET }px;
-	width: ${ SIZE_TILE }px;
+	right: ${ SIZES.TILE * SIZES.SPRITESHEET }px;
+	width: ${ SIZES.TILE }px;
 	height: 100%;
 `
 

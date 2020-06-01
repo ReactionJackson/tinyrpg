@@ -1,7 +1,8 @@
-import { SPRITESHEET_KEY, SIZE_SPRITESHEET } from '../constants'
+import { SIZES, SPRITESHEET_KEY } from '../constants'
+
 export const convertCharToCoords = char => {
 	const index = SPRITESHEET_KEY.indexOf(char)
-	const x = index % SIZE_SPRITESHEET
-	const y = (index - x) / SIZE_SPRITESHEET
+	const x = index % SIZES.SPRITESHEET
+	const y = (index - x) / SIZES.SPRITESHEET
 	return { x, y }
 }

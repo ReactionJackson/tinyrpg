@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { SIZE_INTERFACE } from './constants'
+import { SIZES } from './constants'
 import { useListener } from './hooks/useListener'
 import { getMapAtLocation } from './utils/getMapAtLocation'
 import { Panel } from './components/Panel'
@@ -9,10 +9,16 @@ import Party from './components/Party'
 import Actions from './components/Actions'
 import Dialog from './components/Dialog'
 import Overlay from './components/Overlay'
+import LevelEditor from './components/LevelEditor'
 
 // Interface:
 
 const Game = () => {
+  
+  useEffect(() => setTimeout(() => {
+    console.clear()
+  }, 300), [])
+
   return (
     <Interface>
       <Party />
@@ -21,14 +27,15 @@ const Game = () => {
       <Dialog />
       <World />
       <Overlay />
+      <LevelEditor />
     </Interface>
   )
 }
 
 export const Interface = styled.main`
   position: relative;
-  width: ${ SIZE_INTERFACE }px;
-  height: ${ SIZE_INTERFACE }px;
+  width: ${ SIZES.INTERFACE }px;
+  height: ${ SIZES.INTERFACE }px;
   background-color: tomato;
 `
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { SIZE_WORLD } from '../constants'
+import { SIZES } from '../constants'
 
 const Overlay = () => {
 	
@@ -22,8 +22,8 @@ const Overlay = () => {
 			pointerEvents: 'none',
 			position: 'absolute',
 			right: 0,
-			width: SIZE_WORLD,
-			height: SIZE_WORLD,
+			width: SIZES.WORLD,
+			height: SIZES.WORLD,
 			overflow: 'hidden'
 		}}>
 			<OverlayTop cover={ isOpen } />

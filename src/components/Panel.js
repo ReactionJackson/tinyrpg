@@ -1,15 +1,15 @@
 import styled from 'styled-components'
-import { SIZE_BLOCK } from '../constants'
+import { SIZES } from '../constants'
 
 export const Panel = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  left: ${ ({ x }) => x * SIZE_BLOCK }px;
-  top: ${ ({ y }) => y * SIZE_BLOCK }px;
-  width: ${ ({ width }) => width * SIZE_BLOCK }px;
-  height: ${ ({ height }) => height * SIZE_BLOCK }px;
+  left: ${ ({ x }) => x * SIZES.BLOCK }px;
+  top: ${ ({ y }) => y * SIZES.BLOCK }px;
+  width: ${ ({ width }) => width * SIZES.BLOCK }px;
+  height: ${ ({ height }) => height * SIZES.BLOCK }px;
   padding: ${ ({ border }) => border ? 12 : 0 }px;
   background-color: #000;
   transform: scale(${ ({ hidden }) => hidden ? 0 : 1 });
