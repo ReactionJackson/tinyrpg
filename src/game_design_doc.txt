@@ -1,0 +1,248 @@
+///////////////////////////////////////////////////////////
+// THE COMBO METER
+///////////////////////////////////////////////////////////
+
+As the player uses a character's skills, Mana (see Mana)
+will be added to the combo meter. At the start of the game,
+this will only be two slots long, but eventually it'll
+grow to a maximum of five slots.
+
+- - - - - -
+ 0 0 0 - -
+- - - - - -
+
+The meter will extend upon reaching certain plot points in
+the game (you got Useless Artifact). The purpose of the
+meter is to shape how and when your skills can be used.
+
+
+///////////////////////////////////////////////////////////
+// SKILLS
+///////////////////////////////////////////////////////////
+
+Skills are actions or abilities that characters can use
+when in a battle. Each skill has a number of properties
+that you'd expect to see in any RPG (power, level etc.),
+but also have a Shift (see Shifts). They don't, however,
+have any cost – they are simply available to use when the
+player has the required Mana level in their combo meter.
+Skills can have various effects, such as:
+
+- Damaging units.
+- Healing units.
+- Buffing / debuffing a unit's stats.
+- Controlling enemy units.
+- Applying status effects (poison, haste).
+- Applying X-over-time effects.
+- Interacting with the environment.
+- Giving and taking items.
+
+Players will have multiple ways to acquire skills as they
+play the game. They can be:
+
+- Learnt by levelling up characters.
+- Bought as one-use items from stores.
+- Found on equippable Relics.
+
+Skills that are learnt via levelling up will mostly be
+unique to a specific character. This means that even though
+you can mix and match skills (see Relics), characters won't
+feel completely interchangeable.
+
+
+///////////////////////////////////////////////////////////
+// SHIFTS
+///////////////////////////////////////////////////////////
+
+'Shifts' are in essence the game's concept of a skill or
+item's nature - they represent archetypes.
+
+Primal Shift (Yellow)
+- Elemental Skills, MAG based.
+- Affect units through the forces of nature.
+
+Ersatz Shift (Red)
+- Elemental Skills, PHY based.
+- Affect and manipulate units through the use of machines.
+
+Torpid Shift (Purple)
+- Disruptive Skills.
+- Debuff and weaken the enemy.
+
+Augment Shift (Blue)
+- Protective Skills.
+- Buff and strengthen allies.
+
+When you use a skill which is coloured (and therefore is
+aligned with a shift), the mana it produces will be the
+same colour.
+
+
+///////////////////////////////////////////////////////////
+// MANA
+///////////////////////////////////////////////////////////
+
+You can get mana when you use coloured skills. Mana appears
+as a circle in your combo meter, and will unlock power from
+a shift. Eg. If you have 1 blue mana in your combo meter,
+you will unlock Augment Lv.1. If you have 2 blue mana and 1
+red mana, you will unlock Augment Lv.2 and Torpid Lv.1.
+Mana can also be strategically played in order to create 
+combos.
+
+
+///////////////////////////////////////////////////////////
+// COMBOS / FINISHERS
+///////////////////////////////////////////////////////////
+
+Depending on the order in which you add mana to the combo
+meter, you may be able to perform a special finisher.
+Eg. Yellow, Red, Yellow then FINISH could create a powerful
+elemental attack with debuffing properties. You can perform
+a finisher at any point, so long as you have at least three
+mana in your combo meter. However, if you don't perform a
+finisher by the time your combo meter is full, your meter
+will empty and all shifts will return to Lv.0 regardless.
+You need to think about whether you want to perform a
+specific sequence of mana, or whether you want to use the
+right kind of moves for the right moment.
+
+
+///////////////////////////////////////////////////////////
+// MAGNUS
+///////////////////////////////////////////////////////////
+
+You can unleash your Magnus once its own special meter is
+full. To fill this meter, you must either perform combo
+finishers or simply cycle through your combo meter (by
+filling it with mana). Lower level finishers fill the meter
+slower than higher level ones, so it's best to use the
+highest level combos you can in order to ready Magnus as
+fast as possible.
+
+- Combo Cycle - + 2.5%
+- Finisher Lv.1 - + 4.0%
+- Finisher Lv.2 - + 5.5% 
+- Finisher Lv.3 - + 7.0%
+- Finisher Lv.4 - + 8.5%
+- Finisher Lv.5 - +10.0%
+
+
+///////////////////////////////////////////////////////////
+// GEMS
+///////////////////////////////////////////////////////////
+
+Gems are obtained as loot. They can be imbued to weapons to
+give them enhanced effects, such as stat boosts, status
+effects or even some abilities that change gameplay
+(movement SPD). Gems can also be combined to form dual gems
+(Eg. +PHY & +SPD in a single gem).
+
+
+///////////////////////////////////////////////////////////
+// OPEN SKILLS / ATTACK
+///////////////////////////////////////////////////////////
+
+Open skills have no colour but still add mana to the combo
+meter. The colour added matches the colour of the user's
+current weapon. Eg. A character with a TOR weapon can use
+any of the grey skills to add one red mana to the meter,
+regardless of which one he uses. These skills are often
+basic attacks.
+
+
+///////////////////////////////////////////////////////////
+// WEAPONS
+///////////////////////////////////////////////////////////
+
+Weapons have an attack stat, a shift colour, a passive
+effect and a number of gem slots.
+
+eg. | ERS | MechaLeaf | 50POW | Earth DMG +15% |(O)(O)(O)|
+
+		(...this item has 3 slots that can each hold 1 gem)
+
+
+///////////////////////////////////////////////////////////
+// ARMOUR
+///////////////////////////////////////////////////////////
+
+Armour has a defence stat, a defensive passive effect and
+the ability to be upgraded (LV1, LV2, LV3). Upgrading a
+piece of armour will unlock more effects, upgrade current
+effects and give you more defence. EG:
+
+- L1 PeasantRobes(Fire RES +5)
+- L2 MageRobes(Fire RES +5, Earth RES +5)
+- L3 ArcaneRobes(Fire RES +5, Earth RES +5, Cold RES +5)
+
+Armour pieces have their own experience total and level
+boundaries. These numbers will be hidden from the player
+and simply work behind the scenes. As the player uses
+equipment in battle, a percentage / portion of the
+experience they gain will also be added to the items,
+and they will level up also. Different events can happen
+as items level, which will be explained in detail further
+into this document.
+
+
+///////////////////////////////////////////////////////////
+// CURSED GEAR
+///////////////////////////////////////////////////////////
+
+When armour is upgraded (it hits the EXP cap, time to
+level up), there is a roll to see if it levels up or
+becomes cursed. If it's cursed, the armour is stuck to your
+character and will give negative effects. What's unique
+about this cursed mechanic is that when you find an item,
+it'll always be uncursed.
+
+This means that the player will want to use the new item
+because of its high stats (for example), and over time
+it'll gain EXP. Using an item for so long will make it
+level, so you have to make a choice about whether you want
+to risk letting the item level where it could either get
+much better or much worse, or you can keep switching out
+armour before it levels up.
+
+
+///////////////////////////////////////////////////////////
+// NIGHTMARE GEAR
+///////////////////////////////////////////////////////////
+
+This, unlike regular gear, will always eventually become
+cursed. Starting with 0%, there will be a chance for the
+item to become cursed after every battle (unlike regular
+cursed items, where the roll is made when the EXP threshold
+is met). After each successful pass, the chance for the
+item to become cursed increases by X%. This means that the
+longer you have the item equipped, the more likely it is
+to become cursed and stuck to your character (Ribbon: +50%
+ALL STATS, Robbin: -50% ALL STATS). It's worth noting that
+regardless of this major downside, nightmare gear is still
+considered to be highly valuable. The player will see a
+nightmare icon on the item, forewarning them of the risk of
+use.
+
+
+///////////////////////////////////////////////////////////
+// RELICS
+///////////////////////////////////////////////////////////
+
+Relics are equippable items the player can obtain in a
+number of ways, such as from enemies, chests or shops. They
+have no stats but contain 1-3 skills. Characters must equip
+these relics to use their skills in battle, thus making the
+choice of which relics to equip an important one.
+
+
+///////////////////////////////////////////////////////////
+// CHARACTER LEVELING
+///////////////////////////////////////////////////////////
+
+When a character levels up, their stats will increase,
+they'll learn specific skills (Pokémon) and their number of
+relic slots will increase. This means that as well as
+gaining more skills through levelling, even more will be
+available by equipping more relics, increasing their skill
+pool (total knowledge).
