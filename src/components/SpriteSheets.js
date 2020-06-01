@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { SIZES, THEMES, SPRITESHEET_KEY } from '../constants'
+import { SIZES, TYPES, THEMES, SPRITESHEET_KEY } from '../constants'
 
 const SpriteSheets = ({
 	saveMapData,
@@ -37,7 +37,7 @@ const SpriteSheets = ({
 		</Sheet>
 		<EditorButtons>
 			<DrawEraseButton onClick={ _ => toggleErasing() } isErasing={ isErasing } />
-			<CollisionButton onClick={ _ => selectTile(-1) } isErasing={ isErasing } />
+			<CollisionButton onClick={ _ => selectTile(TYPES.COLLISION) } isErasing={ isErasing } />
 			<SaveButton onClick={ _ => saveMapData() }>S</SaveButton>
 		</EditorButtons>
 	</Sheets>
