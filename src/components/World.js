@@ -12,13 +12,12 @@ import PlayerOriginal from './PlayerOriginal'
 
 const World = () => {
 
+	const [ mapId, setMapId ] = useState(0)
 	const [ worldPos, setWorldPos ] = useState({ x: 0, y: 0 })
 	const [ mapData, setMapData ] = useState(getMapAtLocation(worldPos, TYPES.OVERWORLD))
-	const [ mapId, setMapId ] = useState(0)
+	const [ isTravelling, setIsTravelling ] = useState(false)
 
 	const doTravel = direction => {
-		console.clear()
-		console.log(`doTravel(${ direction })`)
 		let { x, y } = worldPos
 		switch(direction) {
 			case DIRECTIONS.NORTH: y--; break
@@ -26,9 +25,14 @@ const World = () => {
 			case DIRECTIONS.SOUTH: y++; break
 			case DIRECTIONS.WEST: x--; break
 		}
+		setMapId(mapId + 1)
 		setWorldPos({ x, y })
 		setMapData(getMapAtLocation({ x, y }, TYPES.OVERWORLD))
-		setMapId(mapId + 1)
+		setIsTravelling(true)
+	}
+
+	const onFinishTravelling = () => {
+		setIsTravelling(false)
 	}
 
 	return (
@@ -40,11 +44,16 @@ const World = () => {
 					initial={{ x: `${ 100 * ((mapId % 2) - 1 === 0 ? -1 : 1) }%` }}
 					animate={{ x: `0%` }}
 					exit={{ x: `${ 100 * ((mapId % 2) - 1 === 0 ? -1 : 1) }%` }}
+					onAnimationComplete={ onFinishTravelling }
 					style={{ position: 'absolute' }}
 				>
 			    <Screen mapData={ mapData } />
 			  </motion.div>
-			  <Player doTravel={ doTravel } collisionData={ mapData.collision } />
+			  <Player
+			  	doTravel={ doTravel }
+			  	isTravelling={ isTravelling }
+			  	collisionData={ mapData.collision }
+			  />
 	  	</AnimatePresence>
 		</Panel>
 	)
