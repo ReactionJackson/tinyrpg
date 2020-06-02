@@ -13,6 +13,7 @@ import { Panel } from './Panel'
 import { Sprite } from './Sprite'
 import { GridContainer } from './GridContainer'
 import SpriteSheets from './SpriteSheets'
+import Player from './Player'
 import EditorTile from './EditorTile'
 
 const LevelEditor = () => {
@@ -116,6 +117,10 @@ const LevelEditor = () => {
 	  			/>
 				))
 			))}
+		    <Player
+		    	//doScreenTransition={ direction => doScreenTransition(direction) }
+		    	collisionData={ collisionData }
+		    />
 	    </GridContainer>
 	  </Editor>
   )
