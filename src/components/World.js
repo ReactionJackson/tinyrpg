@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import styled from 'styled-components'
-import { SIZES, TYPES, DIRECTIONS } from '../constants'
+import { SIZES, SPEEDS, TYPES, DIRECTIONS } from '../constants'
 import { useListener } from '../hooks/useListener'
 import { getMapAtLocation } from '../utils/getMapAtLocation'
 import { Panel } from './Panel'
 import LevelEditor from './LevelEditor'
 import Screen from './Screen'
 import Player from './Player'
+import PlayerOriginal from './PlayerOriginal'
 
 const World = () => {
 
@@ -15,53 +16,38 @@ const World = () => {
 	const [ mapData, setMapData ] = useState(getMapAtLocation(worldPos, TYPES.OVERWORLD))
 	const [ mapId, setMapId ] = useState(0)
 
-	useListener('keyup', ({ code }) => {
-		if(code === 'KeyT') {
-			setMapId(mapId + 1)
-			setMapData(getMapAtLocation({ x: mapData.location.x === 0 ? -1 : 0, y: 0 }, TYPES.OVERWORLD))
-		}
-	}, [])
-
-	const doScreenTransition = direction => {
+	const doTravel = direction => {
 		console.clear()
-		console.log(`doScreenTransition(${ direction })`)
-		// let { x, y } = screenPos
-		// switch(direction) {
-		// 	case NORTH: y--; break
-		// 	case EAST: x++; break
-		// 	case SOUTH: y++; break
-		// 	case WEST: x--; break
-		// }
-		// setScreenPos({ x, y })
+		console.log(`doTravel(${ direction })`)
+		let { x, y } = worldPos
+		switch(direction) {
+			case DIRECTIONS.NORTH: y--; break
+			case DIRECTIONS.EAST: x++; break
+			case DIRECTIONS.SOUTH: y++; break
+			case DIRECTIONS.WEST: x--; break
+		}
+		setWorldPos({ x, y })
+		setMapData(getMapAtLocation({ x, y }, TYPES.OVERWORLD))
+		setMapId(mapId + 1)
 	}
-
-	// useEffect(() => {
-	// 	setMapData(getMapAtLocation(screenPos, MAP_TYPES.OVERWORLD))
-	// }, [ screenPos ])
-
-	// useEffect(() => {
-	// 	setTileData(mapData.tiles)
-	// 	setEntityData(mapData.entities)
-	// 	setCollisionData(mapData.collision)
-	// }, [ mapData ])
 
 	return (
 		<Panel width={ 3 } height={ 3 } x={ 1 } y={ 0 }>
 			<AnimatePresence initial={ false }>
-		    <Screen mapId={ mapId } mapData={ mapData } />
-		    <Player
-		    	doScreenTransition={ direction => doScreenTransition(direction) }
-		    	collisionData={ mapData.collision }
-		    />
+				<motion.div
+					key={ mapId }
+					transition={{ duration: SPEEDS.TRAVEL, ease: 'linear' }}
+					initial={{ x: `${ 100 * ((mapId % 2) - 1 === 0 ? -1 : 1) }%` }}
+					animate={{ x: `0%` }}
+					exit={{ x: `${ 100 * ((mapId % 2) - 1 === 0 ? -1 : 1) }%` }}
+					style={{ position: 'absolute' }}
+				>
+			    <Screen mapData={ mapData } />
+			  </motion.div>
+			  <Player doTravel={ doTravel } collisionData={ mapData.collision } />
 	  	</AnimatePresence>
 		</Panel>
 	)
 }
-
-const Screens = styled.div`
-	position: relative;
-	width: ${ SIZES.WORLD * 3 }px;
-
-`
 
 export default World

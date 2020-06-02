@@ -6,8 +6,8 @@ export const Sprite = styled.div`
 	width: ${ SIZES.TILE }px;
 	height: ${ SIZES.TILE }px;
 	text-align: center;
+	pointer-events: none;
 	${ ({ grid = false }) => grid ? 'outline: 1px solid #000' : '' };
-	transition: left linear ${ SPEEDS.PLAYER }ms, top linear ${ SPEEDS.PLAYER }ms;
 	${ ({ x, y, type = 'tiles', id, size = 144 }) => `
 		background-image: url(${ require(`../assets/sprites/${ type }_${ id }.png`) });
 		background-size: ${ size }px ${ size }px;

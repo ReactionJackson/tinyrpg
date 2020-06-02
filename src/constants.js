@@ -31,8 +31,9 @@ export const THEMES = {
 	DUNGEON_1: 3,
 }
 
-export const SPEEDS = {
-	PLAYER: 300, // ms
+export const SPEEDS = { // s
+	WALK: 0.3,
+	TRAVEL: 1.5,
 }
 
 export const SPRITESHEET_KEY = '0123456789abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!?@£$€%^&*#[]{}()<>'

@@ -6,6 +6,7 @@ export const Panel = styled.div`
   justify-content: center;
   align-items: center;
   position: absolute;
+  overflow: hidden;
   left: ${ ({ x }) => x * SIZES.BLOCK }px;
   top: ${ ({ y }) => y * SIZES.BLOCK }px;
   width: ${ ({ width }) => width * SIZES.BLOCK }px;
