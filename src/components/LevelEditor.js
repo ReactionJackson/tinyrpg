@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import styled from 'styled-components'
 import { SIZES, TYPES, DIRECTIONS, SPRITESHEET_KEY } from '../constants'
 import { replaceAt } from '../utils/replaceAt'
@@ -19,21 +20,13 @@ import EditorTile from './EditorTile'
 const LevelEditor = () => {
 
 	const [ mapData, setMapData ] = useState(getMapAtLocation({ x: 0, y: 0 }, TYPES.OVERWORLD))
-	const [ tileData, setTileData ] = useState(mapData.tiles)
-	const [ entityData, setEntityData ] = useState(mapData.entities)
-	const [ collisionData, setCollisionData ] = useState(mapData.collision)
-	const [ triggerData, setTriggerData ] = useState([]) // a 2d array of groups of coords?
-
 	const [ tileSheet, setTileSheet ] = useState('01')
 	const [ entitySheet, setEntitySheet ] = useState('01')
-
 	const [ tilePos, setTilePos ] = useState({ x: 0, y: 0 })
 	const [ entityPos, setEntityPos ] = useState({ x: 0, y: 0 })
-
 	const [ paintType, setPaintType ] = useState(TYPES.ENTITY)
 	const [ isPainting, setIsPainting ] = useState(false)
 	const [ isErasing, setIsErasing ] = useState(false)
-	
 	const [ isEditing, setIsEditing ] = useState(false)
 	
 	useListener('keyup', ({ code }) => {
@@ -42,30 +35,31 @@ const LevelEditor = () => {
 
 	const saveMapData = () => {
 		let data = ''
-		data += `\t\ttiles: ${ JSON.stringify(tileData) },`
-		data += `\n\t\tentities: ${ JSON.stringify(entityData) },`
-		data += `\n\t\tcollision: ${ JSON.stringify(collisionData) },`
+		data += `\t\ttiles: ${ JSON.stringify(mapData.tiles) },`
+		data += `\n\t\tentities: ${ JSON.stringify(mapData.entities) },`
+		data += `\n\t\tcollision: ${ JSON.stringify(mapData.collision) },`
 		copyToClipboard(data)
 		console.log('copied!')
 	}
 
 	const updateSpriteData = mapPos => {
 		const pos = paintType === TYPES.TILE ? tilePos : entityPos
-		const data = paintType === TYPES.TILE ? tileData : entityData
+		const data = paintType === TYPES.TILE ? mapData.tiles : mapData.entities
+		const dataType = paintType === TYPES.TILE ? 'tiles' : 'entities'
 		const spriteIndex = getGridIndex(pos, SIZES.SPRITESHEET)
 		const mapIndex = getGridIndex(mapPos, SIZES.MAP)
 		const spriteKey = !isErasing ? SPRITESHEET_KEY[spriteIndex] : (paintType === TYPES.TILE ? '0' : '.')
 		const newData = replaceAt(data, mapIndex, spriteKey)
-		paintType === TYPES.TILE ? setTileData(newData) : setEntityData(newData)
+		setMapData({ ...mapData, [dataType]: newData })
 	}
 
 	const updateCollisionData = mapPos => {
-		if(!isErasing && !collisionData.find(({ x, y }) => x === mapPos.x && y === mapPos.y)) {
-			setCollisionData([ ...collisionData, { ...mapPos } ])
+		if(!isErasing && !mapData.collision.find(({ x, y }) => x === mapPos.x && y === mapPos.y)) {
+			setMapData({ ...mapData, collision: [ ...mapData.collision, { ...mapPos } ] })
 		} else if(isErasing) {
-			let data = [ ...collisionData ]
-			data = data.filter(({ x, y }) => (x !== mapPos.x || y !== mapPos.y))
-			setCollisionData(data)
+			let collision = [ ...mapData.collision ]
+			collision = collision.filter(({ x, y }) => (x !== mapPos.x || y !== mapPos.y))
+			setMapData({ ...mapData, collision })
 		}
 	}
 
@@ -104,23 +98,19 @@ const LevelEditor = () => {
 	  			<EditorTile
 	  				paintType={ paintType }
 	  				isPainting={ isPainting }
-	  				initialTile={ convertCharToCoords(tileData[(y * SIZES.MAP) + x]) }
-	  				initialEntity={ convertCharToCoords(entityData[(y * SIZES.MAP) + x]) }
+	  				initialTile={ convertCharToCoords(mapData.tiles[(y * SIZES.MAP) + x]) }
+	  				initialEntity={ convertCharToCoords(mapData.entities[(y * SIZES.MAP) + x]) }
 	  				tileSheet={ tileSheet }
 	  				entitySheet={ entitySheet }
 	  				tilePos={ tilePos }
 	  				entityPos={ entityPos }
 	  				updateSpriteData={ _ => updateSpriteData({ x, y }) }
 	  				updateCollisionData={ collision => updateCollisionData({ x, y }, collision) }
-	  				hasCollision={ hasCoordsInList({ x, y }, collisionData) }
-	  				hasTrigger={ hasCoordsInList({ x, y }, triggerData) }
+	  				hasCollision={ hasCoordsInList({ x, y }, mapData.collision) }
+	  				hasTrigger={ hasCoordsInList({ x, y }, mapData.triggers) }
 	  			/>
 				))
 			))}
-		    <Player
-		    	//doScreenTransition={ direction => doScreenTransition(direction) }
-		    	collisionData={ collisionData }
-		    />
 	    </GridContainer>
 	  </Editor>
   )
