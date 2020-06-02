@@ -117,6 +117,7 @@ const Player = ({ doTravel, isTravelling, collisionData }) => {
 }
 
 const Character = styled.div`
+  pointer-events: none;
 	width: ${ SIZES.TILE }px;
 	height: ${ SIZES.TILE }px;
 	${ ({ x, y }) => `
