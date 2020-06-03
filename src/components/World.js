@@ -10,24 +10,28 @@ import Screen from './Screen'
 import Player from './Player'
 import PlayerOriginal from './PlayerOriginal'
 
+const { NORTH, EAST, SOUTH, WEST } = DIRECTIONS
+
 const World = () => {
 
 	const [ mapId, setMapId ] = useState(0)
 	const [ worldPos, setWorldPos ] = useState({ x: 0, y: 0 })
 	const [ mapData, setMapData ] = useState(getMapAtLocation(worldPos, TYPES.OVERWORLD))
 	const [ isTravelling, setIsTravelling ] = useState(false)
+	const [ direction, setDirection ] = useState(false)
 
 	const doTravel = direction => {
 		let { x, y } = worldPos
 		switch(direction) {
-			case DIRECTIONS.NORTH: y--; break
-			case DIRECTIONS.EAST: x++; break
-			case DIRECTIONS.SOUTH: y++; break
-			case DIRECTIONS.WEST: x--; break
+			case NORTH: y--; break
+			case EAST: x++; break
+			case SOUTH: y++; break
+			case WEST: x--; break
 		}
 		setMapId(mapId + 1)
 		setWorldPos({ x, y })
 		setMapData(getMapAtLocation({ x, y }, TYPES.OVERWORLD))
+		setDirection(direction)
 		setIsTravelling(true)
 	}
 
@@ -35,17 +39,20 @@ const World = () => {
 		setIsTravelling(false)
 	}
 
+	const rule = `translate${ direction === NORTH || direction === SOUTH ? 'Y' : 'X'}`
+	const mod = direction === NORTH || direction === WEST ? -1 : 1
+
 	return (
 		<Panel width={ 3 } height={ 3 } x={ 1 } y={ 0 }>
 			<AnimatePresence initial={ false }>
 				<motion.div
 					key={ mapId }
 					transition={{ duration: SPEEDS.TRAVEL, ease: 'linear' }}
-					initial={{ x: `${ 100 * ((mapId % 2) - 1 === 0 ? -1 : 1) }%` }}
-					animate={{ x: `0%` }}
-					exit={{ x: `${ 100 * ((mapId % 2) - 1 === 0 ? -1 : 1) }%` }}
-					onAnimationComplete={ onFinishTravelling }
+					initial={{ [rule]: `${ 100 * (mod * -1) }%` }}
+					animate={{ [rule]: `0%` }}
+					exit={{ [rule]: `${ 100 * mod }%` }}
 					style={{ position: 'absolute' }}
+					onAnimationComplete={ onFinishTravelling }
 				>
 			    <Screen mapData={ mapData } />
 			  </motion.div>

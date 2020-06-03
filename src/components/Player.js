@@ -14,7 +14,8 @@ const Player = ({ doTravel, isTravelling, collisionData }) => {
 
 	const [ positions, setPositions ] = useState([
     { x: 0, y: 0, facing: DIRECTIONS.SOUTH },
-    { x: 0, y: 0, facing: DIRECTIONS.SOUTH }
+    { x: 0, y: 0, facing: DIRECTIONS.SOUTH },
+    { x: 0, y: 0, facing: DIRECTIONS.SOUTH },
   ])
 
  useListener('keydown', ({ repeat, code: key }) => {
@@ -76,12 +77,15 @@ const Player = ({ doTravel, isTravelling, collisionData }) => {
         }
         break
     }
+
+    let rest = [ ...positions ]
+    rest.pop()
 		
     if(!isWalkable(newPos)) {
-      setPositions([ { facing: newPos.facing, ...positions[0] }, ...positions ])
+      setPositions([ { facing: newPos.facing, ...positions[0] }, ...rest ])
       isWalking = false
     } else {
-      setPositions([ { ...newPos }, { ...positions[0] } ])
+      setPositions([ { ...newPos }, ...rest ])
     }
   }
 
@@ -97,22 +101,31 @@ const Player = ({ doTravel, isTravelling, collisionData }) => {
   }
 
   return (
-	  <motion.div
-  		initial={{
-  			x: positions[1].x * SIZES.TILE,
-  			y: positions[1].y * SIZES.TILE
-  		}}
-  		animate={{
-  			x: positions[0].x * SIZES.TILE,
-  			y: positions[0].y * SIZES.TILE
-  		}}
-  		onUpdate={ onUpdateWalk }
-      onAnimationComplete={ onFinishWalk }
-  		transition={{ duration: isTravelling ? SPEEDS.TRAVEL : SPEEDS.WALK, ease: 'linear' }}
-  		style={{ zIndex: 10, position: 'absolute', left: 0, top: 0 }}
-  	>
-			<Character x={ 0 } y={ positions[0].facing } />
-    </motion.div>
+    <>
+    {
+      [...Array(positions.length)].map((_, i) => {
+        const { x, y, facing } = positions[i]
+        return (
+          <motion.div
+            initial={{
+              x: x * SIZES.TILE,
+              y: y * SIZES.TILE
+            }}
+            animate={{
+              x: x * SIZES.TILE,
+              y: y * SIZES.TILE
+            }}
+            onUpdate={ onUpdateWalk }
+            onAnimationComplete={ onFinishWalk }
+            transition={{ duration: isTravelling ? SPEEDS.TRAVEL : SPEEDS.WALK, ease: 'linear' }}
+            style={{ zIndex: 10, position: 'absolute', left: 0, top: 0 }}
+          >
+            <Character x={ 0 } y={ facing } />
+          </motion.div>
+        )
+      })
+    }
+    </>
   )
 }
 
