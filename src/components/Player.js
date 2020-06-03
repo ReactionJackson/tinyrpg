@@ -16,6 +16,7 @@ const Player = ({ doTravel, isTravelling, collisionData }) => {
     { x: 0, y: 0, facing: DIRECTIONS.SOUTH },
     { x: 0, y: 0, facing: DIRECTIONS.SOUTH },
     { x: 0, y: 0, facing: DIRECTIONS.SOUTH },
+    { x: 0, y: 0, facing: DIRECTIONS.SOUTH },
   ])
 
  useListener('keydown', ({ repeat, code: key }) => {
@@ -38,13 +39,14 @@ const Player = ({ doTravel, isTravelling, collisionData }) => {
   const doWalk = key => {
 
     let newPos = { ...positions[0] }
+    let travel = false
 
     switch(key) {
       case 'KeyW':
         newPos.facing = DIRECTIONS.NORTH
         if(newPos.y === 0) {
           newPos.y = SIZES.MAP - 1
-          doTravel(DIRECTIONS.NORTH)
+          travel = DIRECTIONS.NORTH
         } else if(isWalkable({ x: newPos.x, y: newPos.y - 1 })) {
           newPos.y--
         }
@@ -53,7 +55,7 @@ const Player = ({ doTravel, isTravelling, collisionData }) => {
         newPos.facing = DIRECTIONS.EAST
         if(newPos.x === SIZES.MAP - 1) {
           newPos.x = 0
-          doTravel(DIRECTIONS.EAST)
+          travel = DIRECTIONS.EAST
         } else if(isWalkable({ x: newPos.x + 1, y: newPos.y })) {
           newPos.x++
         }
@@ -62,7 +64,7 @@ const Player = ({ doTravel, isTravelling, collisionData }) => {
         newPos.facing = DIRECTIONS.SOUTH
         if(newPos.y === SIZES.MAP - 1) {
           newPos.y = 0
-          doTravel(DIRECTIONS.SOUTH)
+          travel = DIRECTIONS.SOUTH
         } else if(isWalkable({ x: newPos.x, y: newPos.y + 1 })) {
           newPos.y++
         }
@@ -71,7 +73,7 @@ const Player = ({ doTravel, isTravelling, collisionData }) => {
         newPos.facing = DIRECTIONS.WEST
         if(newPos.x === 0) {
           newPos.x = SIZES.MAP - 1
-          doTravel(DIRECTIONS.WEST)
+          travel = DIRECTIONS.WEST
         } else if(isWalkable({ x: newPos.x - 1, y: newPos.y })) {
           newPos.x--
         }
@@ -84,6 +86,9 @@ const Player = ({ doTravel, isTravelling, collisionData }) => {
     if(!isWalkable(newPos)) {
       setPositions([ { facing: newPos.facing, ...positions[0] }, ...rest ])
       isWalking = false
+    } else if(travel) {
+      doTravel(travel)
+      setPositions([...Array(positions.length)].map(_ => ({ ...newPos })))
     } else {
       setPositions([ { ...newPos }, ...rest ])
     }
