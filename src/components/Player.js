@@ -14,9 +14,6 @@ const Player = ({ doTravel, isTravelling, collisionData }) => {
 
 	const [ positions, setPositions ] = useState([
     { x: 0, y: 0, facing: DIRECTIONS.SOUTH },
-    { x: 0, y: 0, facing: DIRECTIONS.SOUTH },
-    { x: 0, y: 0, facing: DIRECTIONS.SOUTH },
-    { x: 0, y: 0, facing: DIRECTIONS.SOUTH },
   ])
 
  useListener('keydown', ({ repeat, code: key }) => {

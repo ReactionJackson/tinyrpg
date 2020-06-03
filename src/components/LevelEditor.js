@@ -27,7 +27,7 @@ const LevelEditor = () => {
 	const [ paintType, setPaintType ] = useState(TYPES.ENTITY)
 	const [ isPainting, setIsPainting ] = useState(false)
 	const [ isErasing, setIsErasing ] = useState(false)
-	const [ isEditing, setIsEditing ] = useState(false)
+	const [ isEditing, setIsEditing ] = useState(true)
 	
 	useListener('keyup', ({ code }) => {
 		if(code === 'KeyE') setIsEditing(!isEditing)
@@ -38,6 +38,7 @@ const LevelEditor = () => {
 		data += `\t\ttiles: ${ JSON.stringify(mapData.tiles) },`
 		data += `\n\t\tentities: ${ JSON.stringify(mapData.entities) },`
 		data += `\n\t\tcollision: ${ JSON.stringify(mapData.collision) },`
+		data += `\n\t\ttriggers: ${ JSON.stringify(mapData.triggers) },`
 		copyToClipboard(data)
 		console.log('copied!')
 	}
@@ -63,8 +64,14 @@ const LevelEditor = () => {
 		}
 	}
 
-	const updateTriggerData = () => {
-		// ...
+	const updateTriggerData = mapPos => {
+		if(!isErasing && !mapData.triggers.find(({ x, y }) => x === mapPos.x && y === mapPos.y)) {
+			setMapData({ ...mapData, triggers: [ ...mapData.triggers, { ...mapPos } ] })
+		} else if(isErasing) {
+			let triggers = [ ...mapData.triggers ]
+			triggers = triggers.filter(({ x, y }) => (x !== mapPos.x || y !== mapPos.y))
+			setMapData({ ...mapData, triggers })
+		}
 	}
 
 	const selectSprite = (sprite, type) => {
@@ -106,6 +113,7 @@ const LevelEditor = () => {
 	  				entityPos={ entityPos }
 	  				updateSpriteData={ _ => updateSpriteData({ x, y }) }
 	  				updateCollisionData={ collision => updateCollisionData({ x, y }, collision) }
+	  				updateTriggerData={ collision => updateTriggerData({ x, y }, collision) }
 	  				hasCollision={ hasCoordsInList({ x, y }, mapData.collision) }
 	  				hasTrigger={ hasCoordsInList({ x, y }, mapData.triggers) }
 	  			/>
@@ -120,7 +128,8 @@ const Editor = styled.aside`
 	position: fixed;
 	left: 50%;
 	top: 50%;
-	transform: translate3d(-35%, -25%, 0);
+	transform: translate3d(-35%, -35%, 0) scale(1.3275);
+	transform-origin: top right;
 	display: ${ ({ hidden }) => hidden ? 'none' : 'flex' };
 	justify-content: center;
 	align-items: center;

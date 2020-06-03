@@ -37,7 +37,10 @@ const SpriteSheets = ({
 		</Sheet>
 		<EditorButtons>
 			<DrawEraseButton onClick={ _ => toggleErasing() } isErasing={ isErasing } />
+			{ "--" }
 			<CollisionButton onClick={ _ => selectTile(TYPES.COLLISION) } isErasing={ isErasing } />
+			<TriggerButton onClick={ _ => selectTile(TYPES.TRIGGER) } isErasing={ isErasing } />
+			{ "--" }
 			<SaveButton onClick={ _ => saveMapData() }>S</SaveButton>
 		</EditorButtons>
 	</Sheets>
@@ -47,6 +50,8 @@ const Sheets = styled.aside`
 	display: flex;
 	flex-direction: row-reverse;
 	justify-content: space-between;
+	transform:  scale(0.6725);
+	transform-origin: bottom right;
 	position: absolute;
 	right: 0;
 	bottom: calc(100% + ${ SIZES.TILE }px);
@@ -108,6 +113,10 @@ const DrawEraseButton = styled(EditorButton)`
 
 const CollisionButton = styled(EditorButton)`
 	${ ({ isErasing }) => `background: url(${ require('../assets/sprites/editor_icons.png') }) no-repeat left ${ !isErasing ? '-28px' : '-42px' } top / auto 28px #fff;` }
+`
+
+const TriggerButton = styled(EditorButton)`
+	${ ({ isErasing }) => `background: url(${ require('../assets/sprites/editor_icons.png') }) no-repeat left ${ !isErasing ? '0px' : '-14px' } top -14px / auto 28px #fff;` }
 `
 
 export default SpriteSheets

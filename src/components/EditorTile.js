@@ -14,6 +14,7 @@ const EditorTile = ({
 	entityPos,
 	updateSpriteData,
 	updateCollisionData,
+	updateTriggerData,
 	hasCollision,
 	hasTrigger,
 }) => {
@@ -28,6 +29,8 @@ const EditorTile = ({
 		if(paintType === TYPES.TILE) {
 			if(tilePos === TYPES.COLLISION) {
 				updateCollisionData()
+			} else if(tilePos === TYPES.TRIGGER) {
+				updateTriggerData()
 			} else {
 				setTile(tilePos)
 				updateSpriteData()
@@ -66,10 +69,15 @@ const Marker = styled.div`
 	top: 0;
 	width: 100%;
 	height: 100%;
-	opacity: 0.5;
 `
 
-const Collision = styled(Marker)`background-color: red;`
-const Trigger = styled(Marker)`background-color: magenta;`
+const Collision = styled(Marker)`
+	opacity: 0.5;
+	background-color: #f00;
+`
+
+const Trigger = styled(Marker)`
+	background: url(${ require('../assets/sprites/editor_icons.png') }) left top -16px / 64px auto;
+`
 
 export default EditorTile
